@@ -17,12 +17,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <Button
-            android:id="@+id/btnGetVertices"
+            android:id="@+id/btnGetData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:padding="10dp"
-            android:text="Download Vertices" />
+            android:text="Download Data" />
         <EditText
             android:id="@+id/txtPSU"
             android:layout_width="match_parent"
@@ -41,5 +41,12 @@
             android:layout_margin="10dp"
             android:padding="10dp"
             android:text="Open Map" />
+        <Button
+            android:id="@+id/btnOpenMarker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="Open Marker" />
     </LinearLayout>
 </layout>
