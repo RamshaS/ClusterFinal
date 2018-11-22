@@ -163,7 +163,51 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
 
     }
+    public Collection<MarkerContract> getAllMarkers() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = null;
+        String[] columns = {
+                MarkerTable._ID,
+                MarkerTable.COLUMN_M_LNG,
+                MarkerTable.COLUMN_M_LAT,
+                MarkerTable.COLUMN_CLUSTER_CODE,
+                MarkerTable.COLUMN_HHNO,
 
+
+        };
+        String whereClause = null;
+        String[] whereArgs = null;
+        String groupBy = null;
+        String having = null;
+
+        String orderBy =
+                MarkerTable._ID + " ASC";
+
+        Collection<MarkerContract> allFC = new ArrayList<MarkerContract>();
+        try {
+            c = db.query(
+                    MarkerTable.TABLE_NAME,  // The table to query
+                    columns,                   // The columns to return
+                    whereClause,               // The columns for the WHERE clause
+                    whereArgs,                 // The values for the WHERE clause
+                    groupBy,                   // don't group the rows
+                    having,                    // don't filter by row groups
+                    orderBy                    // The sort order
+            );
+            while (c.moveToNext()) {
+                MarkerContract fc = new MarkerContract();
+                allFC.add(fc.hydrate(c));
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return allFC;
+    }
     public Collection<VerticesContract> getVerticesByCluster(String cluster_code) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
@@ -215,7 +259,8 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 MarkerTable._ID,
                 MarkerTable.COLUMN_CLUSTER_CODE,
                 MarkerTable.COLUMN_M_LAT,
-                MarkerTable.COLUMN_M_LNG
+                MarkerTable.COLUMN_M_LNG,
+                MarkerTable.COLUMN_HHNO
         };
 
         String whereClause = MarkerTable.COLUMN_CLUSTER_CODE + " = ? ";
@@ -297,7 +342,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
                 ContentValues values = new ContentValues();
 
-                values.put(MarkerTable.COLUMN_PROJECTNAME, mc.getprojectName());
+//                values.put(MarkerTable.COLUMN_PROJECTNAME, mc.getprojectName());
                 values.put(MarkerTable.COLUMN_M_LAT, mc.getm_lat());
                 values.put(MarkerTable.COLUMN_M_LNG, mc.getm_lng());
                 values.put(MarkerTable.COLUMN_CLUSTER_CODE, mc.getcluster_code());

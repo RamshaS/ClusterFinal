@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FormsDBHelper db = new FormsDBHelper(MainActivity.this);
+                db.getAllMarkers();
                 Collection<MarkerContract> m = db.getMarkers(bi.txtPSU.getText().toString());
 
                 if(m.size() != 0){

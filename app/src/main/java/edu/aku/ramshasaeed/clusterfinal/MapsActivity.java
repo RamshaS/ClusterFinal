@@ -115,7 +115,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         for (MarkerContract mv : mc) {
             mclusterName = mv.getcluster_code();
-            mclusterPoints.add(new LatLng(mv.getm_lat(), mv.getm_lng()));
+            mclusterPoints.add(new LatLng(Double.valueOf(mv.getm_lat()), Double.valueOf(mv.getm_lng())));
         }
         mclusterStart = (mclusterPoints.get(0));
         clusterStart = (clusterPoints.get(0));

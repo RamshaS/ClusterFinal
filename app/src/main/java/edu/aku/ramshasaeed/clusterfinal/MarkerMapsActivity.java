@@ -60,6 +60,7 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
     private ArrayList<LatLng> houseHold;
 //    private ArrayList<LatLng> clusterPoints;
     private ArrayList<LatLng> mclusterPoints;
+    private ArrayList<String> householdPoints;
     private ArrayList<LatLng> newClusterPoints;
     private ArrayList<LatLng> ucPoints;
     private PolygonOptions polygon102;
@@ -114,7 +115,8 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
         }*/
         for (MarkerContract mv : mc) {
             mclusterName = mv.getcluster_code();
-            mclusterPoints.add(new LatLng(mv.getm_lat(), mv.getm_lng()));
+            mclusterPoints.add(new LatLng(Double.valueOf(mv.getm_lat()), Double.valueOf(mv.getm_lng())));
+            householdPoints.add(mv.gethhno());
         }
         mclusterStart = (mclusterPoints.get(0));
 //        clusterStart = (clusterPoints.get(0));
@@ -141,8 +143,6 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     public void showGPSCoordinates(View v) {
         showCurrentLocation();
-
-
     }
 
     protected boolean isBetterLocation(Location location, Location currentBestLocation) {
@@ -203,7 +203,13 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    protected Marker createMarker(LatLng mclusterStart, String title) {
 
+        return mMap.addMarker(new MarkerOptions()
+                .position(mclusterStart)
+                .anchor(0.5f, 1)
+                .title(title));
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -218,14 +224,21 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
 
 
 //        clusterMarker.showInfoWindow();
-        Marker mclusterMarker = mMap.addMarker(new MarkerOptions()
+
+        Marker mclusterMarker;
+        for(int i = 0 ; i < mclusterPoints.size() ; i++) {
+            mclusterMarker = createMarker(mclusterPoints.get(i), householdPoints.get(i));
+            mclusterMarker.showInfoWindow();
+        }
+        /*Marker mclusterMarker = mMap.addMarker(new MarkerOptions()
                 .position(mclusterStart)
                 .title(mclusterName)
                 .anchor(0.5f, 1)
-        );
+        );*/
 
 
-        mclusterMarker.showInfoWindow();
+
+
         // Instantiates a new Polyline object and adds clusterPoints to define a rectangle
        /* PolygonOptions rectCluster = new PolygonOptions()
                 .fillColor(getResources().getColor(R.color.colorAccentAlpha))
@@ -233,11 +246,11 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
                 .zIndex(2.0f);
         rectCluster.addAll(clusterPoints);*/
 
-        PolygonOptions rectCluster = new PolygonOptions()
+ /*       PolygonOptions rectCluster = new PolygonOptions()
                 .fillColor(getResources().getColor(R.color.colorAccentAlpha))
                 .strokeColor(Color.RED)
                 .zIndex(2.0f);
-        rectCluster.addAll(mclusterPoints);
+        rectCluster.addAll(mclusterPoints);*/
 /*
         PolygonOptions rectUC = new PolygonOptions()
                 .fillColor(getResources().getColor(R.color.dullBlueOverlay))
@@ -249,8 +262,8 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
 
 // Get back the mutable Polyline
         // Cluster Poly
-        Polygon polyCluster = mMap.addPolygon(rectCluster);
-        polyCluster.setGeodesic(true);
+      /*  Polygon polyCluster = mMap.addPolygon(rectCluster);
+        polyCluster.setGeodesic(true);*/
         // UC Poly
        /* Polygon polyUC = mMap.addPolygon(rectUC);
         polyUC.setGeodesic(true);*/

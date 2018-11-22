@@ -10,8 +10,8 @@ public class MarkerContract {
 
     private String projectName;
     private int _ID;
-    private Double m_lat;
-    private Double m_lng;
+    private String m_lat;
+    private String m_lng;
     private String cluster_code;
     private String hhno;
 
@@ -19,16 +19,16 @@ public class MarkerContract {
     }
 
     public MarkerContract sync(JSONObject jsonObject) throws JSONException {
-        this.m_lat= jsonObject.getDouble(MarkerTable.COLUMN_M_LAT);
-        this.m_lng= jsonObject.getDouble(MarkerTable.COLUMN_M_LNG);
+        this.m_lat= jsonObject.getString(MarkerTable.COLUMN_M_LAT);
+        this.m_lng= jsonObject.getString(MarkerTable.COLUMN_M_LNG);
         this.cluster_code= jsonObject.getString(MarkerTable.COLUMN_CLUSTER_CODE);
         this.hhno= jsonObject.getString(MarkerTable.COLUMN_HHNO);
         return this;
     }
 
     public MarkerContract hydrate(Cursor cursor) {
-        this.m_lat = cursor.getDouble(cursor.getColumnIndex(MarkerTable.COLUMN_M_LAT));
-        this.m_lng = cursor.getDouble(cursor.getColumnIndex(MarkerTable.COLUMN_M_LNG));
+        this.m_lat = cursor.getString(cursor.getColumnIndex(MarkerTable.COLUMN_M_LAT));
+        this.m_lng = cursor.getString(cursor.getColumnIndex(MarkerTable.COLUMN_M_LNG));
         this.cluster_code = cursor.getString(cursor.getColumnIndex(MarkerTable.COLUMN_CLUSTER_CODE));
         this.hhno = cursor.getString(cursor.getColumnIndex(MarkerTable.COLUMN_HHNO));
 
@@ -43,19 +43,19 @@ public class MarkerContract {
         this._ID = _ID;
     }
 
-    public Double getm_lat() {
+    public String getm_lat() {
         return m_lat;
     }
 
-    public void setm_lat(Double m_lat) {
+    public void setm_lat(String m_lat) {
         this.m_lat = m_lat;
     }
 
-    public Double getm_lng() {
+    public String getm_lng() {
         return m_lng;
     }
 
-    public void setm_lng(Double m_lng) {
+    public void setm_lng(String m_lng) {
         this.m_lng = m_lng;
     }
 
