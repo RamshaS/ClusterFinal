@@ -103,6 +103,7 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
 
 //        clusterPoints = new ArrayList<LatLng>();
         mclusterPoints = new ArrayList<LatLng>();
+        householdPoints = new ArrayList<String>();
         newClusterPoints = new ArrayList<LatLng>();
         ucPoints = new ArrayList<LatLng>();
 
@@ -229,6 +230,7 @@ public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCa
         for(int i = 0 ; i < mclusterPoints.size() ; i++) {
             mclusterMarker = createMarker(mclusterPoints.get(i), householdPoints.get(i));
             mclusterMarker.showInfoWindow();
+            mclusterMarker.setTag(0);
         }
         /*Marker mclusterMarker = mMap.addMarker(new MarkerOptions()
                 .position(mclusterStart)
