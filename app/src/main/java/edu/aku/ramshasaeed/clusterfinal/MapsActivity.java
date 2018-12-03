@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -65,9 +66,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<LatLng> ucPoints;
     private PolygonOptions polygon102;
     private LatLng clusterStart;
-    private LatLng mclusterStart;
     private String clusterName;
-    private String mclusterName;
+    private ArrayList<String> householdPoints;
 
 
     @Override
@@ -104,20 +104,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         clusterPoints = new ArrayList<LatLng>();
         mclusterPoints = new ArrayList<LatLng>();
         newClusterPoints = new ArrayList<LatLng>();
+        householdPoints = new ArrayList<String>();
         ucPoints = new ArrayList<LatLng>();
 
         Collection<VerticesContract> vc = db.getVerticesByCluster(hh02txt);
-        Collection<MarkerContract> mc = db.getMarkers(hh02txt);
+        Collection<VerticesContract> mc = db.getMarkersByCluster(hh02txt);
 
         for (VerticesContract v : vc) {
             clusterName = v.getCluster_code();
             clusterPoints.add(new LatLng(v.getPoly_lat(), v.getPoly_lng()));
+
         }
-        for (MarkerContract mv : mc) {
-            mclusterName = mv.getcluster_code();
-            mclusterPoints.add(new LatLng(Double.valueOf(mv.getm_lat()), Double.valueOf(mv.getm_lng())));
+        for (VerticesContract v : mc) {
+//            clusterName = v.getCluster_code();
+            mclusterPoints.add(new LatLng(v.getPoly_lat(), v.getPoly_lng()));
+            householdPoints.add(v.getmarker_hh());
         }
-        mclusterStart = (mclusterPoints.get(0));
         clusterStart = (clusterPoints.get(0));
        /* Collection<VerticesUCContract> vcuc = db.getVerticesByUC(AppMain.hh01txt);
         for (VerticesUCContract v : vcuc) {
@@ -204,29 +206,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    protected Marker createMarker(LatLng mclusterStart, String title) {
 
+        return mMap.addMarker(new MarkerOptions()
+                .position(mclusterStart)
+                .anchor(0.5f, 1)
+                .title(title));
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
         // Get the current location of the device and set the position of the map.
         // Add a marker in Sydney and move the camera
-        Marker clusterMarker = mMap.addMarker(new MarkerOptions()
+
+     /*   Marker clusterMarker = mMap.addMarker(new MarkerOptions()
                 .position(clusterStart)
                 .title(clusterName)
                 .anchor(0.5f, 1)
-        );
+        );*/
+        Marker mhhMarker;
+        for(int i = 0 ; i < mclusterPoints.size() ; i++) {
+            mhhMarker = createMarker(mclusterPoints.get(i), householdPoints.get(i));
+            mhhMarker.showInfoWindow();
+            mhhMarker.setTag(0);
+        }
 
 
-        clusterMarker.showInfoWindow();
-        Marker mclusterMarker = mMap.addMarker(new MarkerOptions()
-                .position(mclusterStart)
-                .title(mclusterName)
-                .anchor(0.5f, 1)
-        );
 
 
-        mclusterMarker.showInfoWindow();
+
         // Instantiates a new Polyline object and adds clusterPoints to define a rectangle
         PolygonOptions rectCluster = new PolygonOptions()
                 .fillColor(getResources().getColor(R.color.colorAccentAlpha))

@@ -14,32 +14,62 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:padding="20dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/agakhan" />
+
         <Button
             android:id="@+id/btnGetData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:padding="10dp"
+            android:textSize="16sp"
+            android:drawableLeft="@android:drawable/stat_notify_sync"
+            android:drawableTint="@color/colorAccent"
             android:text="Download Data" />
-        <EditText
-            android:id="@+id/txtPSU"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ddd"
-            android:hint="Cluster number"
-            android:inputType="number"
-            android:maxLength="4"
-            android:padding="10dp"
-            android:layout_margin="10dp"
-            android:textColor="@android:color/black" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:layout_marginRight="@null"
+                android:paddingRight="@null"
+                android:text="Enter Cluster: "/>
+            <EditText
+                android:id="@+id/txtPSU"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="#ddd"
+                android:inputType="number"
+                android:maxLength="4"
+                android:padding="10dp"
+                android:layout_marginLeft="@null"
+                android:paddingLeft="@null"
+                android:hint="XXXX"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnOpenMap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:padding="10dp"
+            android:drawableLeft="@android:drawable/ic_dialog_map"
+            android:drawableTint="@color/colorAccent"
+            android:textSize="14sp"
             android:text="Open Map" />
         <Button
             android:id="@+id/btnOpenMarker"
@@ -47,6 +77,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:padding="10dp"
+            android:enabled="false"
+            android:visibility="gone"
             android:text="Open Marker" />
     </LinearLayout>
 </layout>

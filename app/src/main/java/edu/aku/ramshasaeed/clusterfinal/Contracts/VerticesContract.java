@@ -16,6 +16,9 @@ public class VerticesContract {
     private Double poly_lat;
     private Double poly_lng;
     private String poly_seq;
+    private String marker_hh;
+    private String geoarea;
+    private String pcode;
 
 
     public VerticesContract() {
@@ -26,6 +29,9 @@ public class VerticesContract {
         this.poly_lat = jsonObject.getDouble(singleVertices.COLUMN_POLY_LAT);
         this.poly_lng = jsonObject.getDouble(singleVertices.COLUMN_POLY_LANG);
         this.poly_seq = jsonObject.getString(singleVertices.COLUMN_POLY_SEQ);
+        this.marker_hh = jsonObject.getString(singleVertices.COLUMN_MARKER_HH);
+        this.geoarea = jsonObject.getString(singleVertices.COLUMN_GEO_AREA);
+        this.pcode = jsonObject.getString(singleVertices.COLUMN_PSCODE);
 
 
         return this;
@@ -36,7 +42,9 @@ public class VerticesContract {
         this.poly_lat = cursor.getDouble(cursor.getColumnIndex(singleVertices.COLUMN_POLY_LAT));
         this.poly_lng = cursor.getDouble(cursor.getColumnIndex(singleVertices.COLUMN_POLY_LANG));
         this.poly_seq = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_POLY_SEQ));
-
+        this.marker_hh =cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_MARKER_HH));
+        this.geoarea = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_GEO_AREA));
+        this.pcode = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_PSCODE));
         return this;
     }
 
@@ -72,6 +80,30 @@ public class VerticesContract {
         this.poly_seq = poly_seq;
     }
 
+    public String getmarker_hh() {
+        return marker_hh;
+    }
+
+    public void setmarker_hh(String marker_hh) {
+        this.marker_hh = marker_hh;
+    }
+
+    public String getgeoarea() {
+        return geoarea;
+    }
+
+    public void setgeoarea(String geoarea) {
+        this.geoarea = geoarea;
+    }
+
+    public String getpcode() {
+        return pcode;
+    }
+
+    public void setpcode(String pcode) {
+        this.pcode = pcode;
+    }
+
     public static abstract class singleVertices implements BaseColumns {
 
         public static final String TABLE_NAME = "Vertices";
@@ -81,6 +113,9 @@ public class VerticesContract {
         public static final String COLUMN_POLY_LAT = "poly_lat";
         public static final String COLUMN_POLY_LANG = "poly_lng";
         public static final String COLUMN_POLY_SEQ = "poly_seq";
+        public static final String COLUMN_MARKER_HH = "marker_hh";
+        public static final String COLUMN_GEO_AREA = "geoarea";
+        public static final String COLUMN_PSCODE = "pcode";
 
         public static final String _URI = "vertices.php";
     }

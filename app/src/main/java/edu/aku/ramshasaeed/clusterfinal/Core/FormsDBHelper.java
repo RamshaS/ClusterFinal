@@ -48,7 +48,10 @@ public class FormsDBHelper extends SQLiteOpenHelper {
             singleVertices.COLUMN_CLUSTER_CODE + " TEXT," +
             singleVertices.COLUMN_POLY_LAT + " TEXT, " +
             singleVertices.COLUMN_POLY_LANG + " TEXT, " +
-            singleVertices.COLUMN_POLY_SEQ + " TEXT " +
+            singleVertices.COLUMN_POLY_SEQ + " TEXT ," +
+            singleVertices.COLUMN_MARKER_HH + " TEXT ," +
+            singleVertices.COLUMN_GEO_AREA + " TEXT, " +
+            singleVertices.COLUMN_PSCODE + " TEXT " +
             ");";
 
     final String SQL_CREATE_MARKER_TABLE = "CREATE TABLE " + MarkerTable.TABLE_NAME + " (" +
@@ -75,7 +78,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Do the creating of the databases.
         db.execSQL(SQL_CREATE_VERTICES_TABLE);
-        db.execSQL(SQL_CREATE_MARKER_TABLE);
+//        db.execSQL(SQL_CREATE_MARKER_TABLE);
         db.execSQL(SQL_CREATE_DISTRICTS_TABLE);
 
     }
@@ -216,10 +219,13 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_CLUSTER_CODE,
                 singleVertices.COLUMN_POLY_LAT,
                 singleVertices.COLUMN_POLY_LANG,
-                singleVertices.COLUMN_POLY_SEQ
+                singleVertices.COLUMN_POLY_SEQ,
+                singleVertices.COLUMN_MARKER_HH,
+                singleVertices.COLUMN_GEO_AREA,
+                singleVertices.COLUMN_PSCODE
         };
 
-        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? ";
+        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND ("+singleVertices.COLUMN_POLY_SEQ +" != '' OR "+singleVertices.COLUMN_POLY_SEQ+" != null)";
         String[] whereArgs = {cluster_code};
         String groupBy = null;
         String having = null;
@@ -252,6 +258,55 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         }
         return allVC;
     }
+    public Collection<VerticesContract> getMarkersByCluster(String cluster_code) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = null;
+        String[] columns = {
+                singleVertices._ID,
+                singleVertices.COLUMN_CLUSTER_CODE,
+                singleVertices.COLUMN_POLY_LAT,
+                singleVertices.COLUMN_POLY_LANG,
+                singleVertices.COLUMN_POLY_SEQ,
+                singleVertices.COLUMN_MARKER_HH,
+                singleVertices.COLUMN_GEO_AREA,
+                singleVertices.COLUMN_PSCODE
+        };
+
+        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND ("+singleVertices.COLUMN_POLY_SEQ +" == '' OR "+singleVertices.COLUMN_POLY_SEQ+" == null)";
+        String[] whereArgs = {cluster_code};
+        String groupBy = null;
+        String having = null;
+
+        String orderBy =
+                singleVertices.COLUMN_POLY_SEQ + " ASC";
+
+        Collection<VerticesContract> allVC = new ArrayList<>();
+        try {
+            c = db.query(
+                    singleVertices.TABLE_NAME,  // The table to query
+                    columns,                   // The columns to return
+                    whereClause,               // The columns for the WHERE clause
+                    whereArgs,                 // The values for the WHERE clause
+                    groupBy,                   // don't group the rows
+                    having,                    // don't filter by row groups
+                    orderBy                    // The sort order
+            );
+            while (c.moveToNext()) {
+                VerticesContract vc = new VerticesContract();
+                allVC.add(vc.hydrate(c));
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return allVC;
+    }
+
+
     public Collection<MarkerContract> getMarkers(String cluster_code) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
@@ -318,6 +373,9 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 values.put(singleVertices.COLUMN_POLY_LAT, vc.getPoly_lat());
                 values.put(singleVertices.COLUMN_POLY_LANG, vc.getPoly_lng());
                 values.put(singleVertices.COLUMN_POLY_SEQ, vc.getPoly_seq());
+                values.put(singleVertices.COLUMN_MARKER_HH, vc.getmarker_hh());
+                values.put(singleVertices.COLUMN_GEO_AREA, vc.getgeoarea());
+                values.put(singleVertices.COLUMN_PSCODE, vc.getpcode());
 
                 db.insert(singleVertices.TABLE_NAME, null, values);
             }
