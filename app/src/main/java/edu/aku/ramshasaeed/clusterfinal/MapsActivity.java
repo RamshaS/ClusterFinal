@@ -32,6 +32,7 @@ import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
@@ -68,6 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LatLng clusterStart;
     private String clusterName;
     private ArrayList<String> householdPoints;
+    private Polygon redPolygon, greenPolygon;
 
 
     @Override
@@ -76,7 +78,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         db = new FormsDBHelper(this);
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -213,6 +214,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .anchor(0.5f, 1)
                 .title(title));
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -226,14 +228,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .anchor(0.5f, 1)
         );*/
         Marker mhhMarker;
-        for(int i = 0 ; i < mclusterPoints.size() ; i++) {
+        for (int i = 0; i < mclusterPoints.size(); i++) {
             mhhMarker = createMarker(mclusterPoints.get(i), householdPoints.get(i));
             mhhMarker.showInfoWindow();
             mhhMarker.setTag(0);
         }
-
-
-
 
 
         // Instantiates a new Polyline object and adds clusterPoints to define a rectangle
@@ -253,8 +252,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 // Get back the mutable Polyline
         // Cluster Poly
-        Polygon polyCluster = mMap.addPolygon(rectCluster);
-        polyCluster.setGeodesic(true);
+/*        Polygon polyCluster = mMap.addPolygon(rectCluster);
+        polyCluster.setGeodesic(true);*/
+        redPolygon = mMap.addPolygon(rectCluster);
+        redPolygon.setGeodesic(true);
+
         // UC Poly
        /* Polygon polyUC = mMap.addPolygon(rectUC);
         polyUC.setGeodesic(true);*/
@@ -283,6 +285,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });*/
+
+
+/*
+//        mDefaultLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            mDefaultLocation = new LatLng(24.89861595, 67.08128572);
+//        updateCameraBearing(mMap, location.getBearing());
+
+        if (PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false)) {
+
+
+
+// Get back the mutable Polyline
+            // Cluster Poly
+
+            polyCluster = mMap.addPolygon(addGreenPolygon(clusterPoints));
+
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.89861595, 67.08128572), 20));
+
+
+        } else if (polyCluster != null && !(PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false))) {
+            polyCluster = mMap.addPolygon(addRedPolygon(clusterPoints));
+            polyCluster.remove();
+            polyCluster = null;
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(clusterPoints.get(0), DEFAULT_ZOOM));
+
+
+        }*/
+
+
     }
 
     private void updateCameraBearing(GoogleMap googleMap, float bearing) {
@@ -295,17 +327,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
     }
+    PolygonOptions addRedPolygon(ArrayList<LatLng> clusterPoints){
+    PolygonOptions rectCluster = new PolygonOptions()
+            .fillColor(getResources().getColor(R.color.colorAccentAlpha))
+            .strokeColor(Color.RED)
+            .zIndex(2.0f);
+    rectCluster.addAll(clusterPoints);
+        return rectCluster;
 
+    }
+    PolygonOptions addGreenPolygon(ArrayList<LatLng> clusterPoints){
+    PolygonOptions rectSCluster = new PolygonOptions()
+            .fillColor(getResources().getColor(R.color.colorAccentGAlpha))
+            .strokeColor(Color.GREEN)
+            .zIndex(2.0f);
+    rectSCluster.addAll(clusterPoints);
+    return rectSCluster;
+}
     private class MyLocationListener implements LocationListener {
 
         Polygon polySCluster = null;
 
 
         public void onLocationChanged(Location location) {
+//            changePolygonColor(new LatLng(24.89941909084409,67.08076000213624));
+
             mDefaultLocation = new LatLng(location.getLatitude(), location.getLongitude());
+//            mDefaultLocation = new LatLng(25, 67);
             updateCameraBearing(mMap, location.getBearing());
 
-            if (polySCluster == null && PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false)) {
+            if (PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false)) {
                 PolygonOptions rectSCluster = new PolygonOptions()
                         .fillColor(getResources().getColor(R.color.colorAccentGAlpha))
                         .strokeColor(Color.GREEN)
@@ -315,6 +366,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 // Get back the mutable Polyline
                 // Cluster Poly
+
                 polySCluster = mMap.addPolygon(rectSCluster);
 
 
