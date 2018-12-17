@@ -87,6 +87,6 @@ public class UsersContract {
         public static final String ROW_USERNAME = "username";
         public static final String ROW_PASSWORD = "password";
 
-        public static final String URL = "users.php";
+        public static final String _URI = "users.php";
     }
 }

@@ -65,7 +65,7 @@ public class SyncAllData extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        Log.d(TAG, "doInBackground: URL " + url);
+        Log.d(TAG, "doInBackground: _URI " + url);
         return downloadUrl(contractClass);
     }
 

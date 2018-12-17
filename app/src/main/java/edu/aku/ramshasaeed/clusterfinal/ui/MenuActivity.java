@@ -22,15 +22,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
+import edu.aku.ramshasaeed.clusterfinal.Contracts.BLRandomContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.UsersContract;
+import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.AndroidDatabaseManager;
 import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
 import edu.aku.ramshasaeed.clusterfinal.get.GetAllData;
+import edu.aku.ramshasaeed.clusterfinal.sync.SyncDevice;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDevicInterface {
 
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
@@ -84,7 +88,7 @@ public class MenuActivity extends AppCompatActivity {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
 
-            new syncData(this).execute();
+            new SyncDevice(this, true).execute();
 
         } else {
             Toast.makeText(this, "No network connection available.", Toast.LENGTH_SHORT).show();
@@ -172,6 +176,8 @@ public class MenuActivity extends AppCompatActivity {
                     db.getUnsyncedForms()
             ).execute();*/
 
+            Toast.makeText(this, "Syncing Start.", Toast.LENGTH_SHORT).show();
+            new SyncDevice(this, false).execute();
 
             SharedPreferences syncPref = getSharedPreferences("SyncInfo", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = syncPref.edit();
@@ -186,12 +192,22 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void processFinish(boolean flag) {
+        if (flag) {
+            HashMap<String, String> tagVal = AppMain.getTagValues(this);
+            new syncData(this, tagVal.get("org") != null ? tagVal.get("org").equals("null") ? null : tagVal.get("org") : null).execute();
+        }
+    }
+
     public class syncData extends AsyncTask<String, String, String> {
 
         private Context mContext;
+        String orgID;
 
-        public syncData(Context mContext) {
+        public syncData(Context mContext, String orgID) {
             this.mContext = mContext;
+            this.orgID = orgID;
         }
 
         @Override
@@ -200,8 +216,9 @@ public class MenuActivity extends AppCompatActivity {
 
                 @Override
                 public void run() {
-                    new GetAllData(mContext, "User", AppMain._HOST_URL + UsersContract.UsersTable.URL).execute();
-                    new GetAllData(mContext, "Vertices", AppMain._HOST_URL + UsersContract.UsersTable.URL).execute();
+                    new GetAllData(mContext, "User", AppMain._HOST_URL + UsersContract.UsersTable._URI).execute();
+                    new GetAllData(mContext, "Vertices", AppMain._HOST_URL + VerticesContract.singleVertices._URI).execute();
+                    new GetAllData(mContext, "BLRandom", AppMain._HOST_URL + BLRandomContract.singleRandomHH._URI).execute(orgID);
                 }
             });
 

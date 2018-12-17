@@ -30,10 +30,10 @@ public class MainActivity extends MenuActivity {
     }
 
     public void openForm() {
-
         if (!validatorClass.EmptyTextBox(this, bi.txtPSU, "Enter Cluster"))
             return;
 
+        startActivity(new Intent(this, ValidatorActivity.class));
     }
 
     public void openMap() {
