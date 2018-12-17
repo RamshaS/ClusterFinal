@@ -15,10 +15,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract.DistrictTable;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract.MarkerTable;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.UsersContract.UsersTable;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract.singleVertices;
@@ -50,21 +46,6 @@ public class FormsDBHelper extends SQLiteOpenHelper {
             singleVertices.COLUMN_PSCODE + " TEXT " +
             ");";
 
-    final String SQL_CREATE_MARKER_TABLE = "CREATE TABLE " + MarkerTable.TABLE_NAME + " (" +
-            MarkerTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            MarkerTable.COLUMN_PROJECTNAME + " TEXT," +
-            MarkerTable.COLUMN_M_LAT + " TEXT," +
-            MarkerTable.COLUMN_M_LNG + " TEXT," +
-            MarkerTable.COLUMN_CLUSTER_CODE + " TEXT," +
-            MarkerTable.COLUMN_HHNO + " TEXT " +
-            ");";
-    final String SQL_CREATE_DISTRICTS_TABLE = "CREATE TABLE " + DistrictTable.TABLE_NAME + " (" +
-            DistrictTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            DistrictTable.COLUMN_PROJECTNAME + " TEXT," +
-            DistrictTable.COLUMN_GEOAREA + " TEXT," +
-            DistrictTable.COLUMN_PCODE + " TEXT" +
-            ");";
-
     final String SQL_CREATE_USERS = "CREATE TABLE " + UsersTable.TABLE_NAME + "("
             + UsersTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + UsersTable.ROW_USERNAME + " TEXT,"
@@ -80,8 +61,6 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         // Do the creating of the databases.
         db.execSQL(SQL_CREATE_USERS);
         db.execSQL(SQL_CREATE_VERTICES_TABLE);
-        db.execSQL(SQL_CREATE_DISTRICTS_TABLE);
-
     }
 
     @Override
@@ -192,52 +171,6 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public Collection<MarkerContract> getAllMarkers() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = null;
-        String[] columns = {
-                MarkerTable._ID,
-                MarkerTable.COLUMN_M_LNG,
-                MarkerTable.COLUMN_M_LAT,
-                MarkerTable.COLUMN_CLUSTER_CODE,
-                MarkerTable.COLUMN_HHNO,
-
-
-        };
-        String whereClause = null;
-        String[] whereArgs = null;
-        String groupBy = null;
-        String having = null;
-
-        String orderBy =
-                MarkerTable._ID + " ASC";
-
-        Collection<MarkerContract> allFC = new ArrayList<MarkerContract>();
-        try {
-            c = db.query(
-                    MarkerTable.TABLE_NAME,  // The table to query
-                    columns,                   // The columns to return
-                    whereClause,               // The columns for the WHERE clause
-                    whereArgs,                 // The values for the WHERE clause
-                    groupBy,                   // don't group the rows
-                    having,                    // don't filter by row groups
-                    orderBy                    // The sort order
-            );
-            while (c.moveToNext()) {
-                MarkerContract fc = new MarkerContract();
-                allFC.add(fc.hydrate(c));
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-            if (db != null) {
-                db.close();
-            }
-        }
-        return allFC;
-    }
-
     public Collection<VerticesContract> getVerticesByCluster(String cluster_code) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
@@ -334,51 +267,6 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         return allVC;
     }
 
-
-    public Collection<MarkerContract> getMarkers(String cluster_code) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = null;
-        String[] columns = {
-                MarkerTable._ID,
-                MarkerTable.COLUMN_CLUSTER_CODE,
-                MarkerTable.COLUMN_M_LAT,
-                MarkerTable.COLUMN_M_LNG,
-                MarkerTable.COLUMN_HHNO
-        };
-
-        String whereClause = MarkerTable.COLUMN_CLUSTER_CODE + " = ? ";
-        String[] whereArgs = {cluster_code};
-        String groupBy = null;
-        String having = null;
-        String orderBy = null;
-
-        Collection<MarkerContract> allVC = new ArrayList<>();
-        try {
-            c = db.query(
-                    MarkerTable.TABLE_NAME,  // The table to query
-                    columns,                   // The columns to return
-                    whereClause,               // The columns for the WHERE clause
-                    whereArgs,                 // The values for the WHERE clause
-                    groupBy,                   // don't group the rows
-                    having,                    // don't filter by row groups
-                    orderBy                    // The sort order
-            );
-            while (c.moveToNext()) {
-                MarkerContract vc = new MarkerContract();
-                allVC.add(vc.hydrate(c));
-            }
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-            if (db != null) {
-                db.close();
-            }
-        }
-        return allVC;
-    }
-
-
     public void syncVertices(JSONArray vcList) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(singleVertices.TABLE_NAME, null, null);
@@ -403,64 +291,6 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 values.put(singleVertices.COLUMN_PSCODE, vc.getpcode());
 
                 db.insert(singleVertices.TABLE_NAME, null, values);
-            }
-            db.close();
-
-        } catch (Exception e) {
-
-        }
-    }
-
-    public void syncMarkers(JSONArray mcList) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(MarkerTable.TABLE_NAME, null, null);
-
-        try {
-            JSONArray jsonArray = mcList;
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObjectVR = jsonArray.getJSONObject(i);
-
-                MarkerContract mc = new MarkerContract();
-                mc.sync(jsonObjectVR);
-
-                ContentValues values = new ContentValues();
-
-//                values.put(MarkerTable.COLUMN_PROJECTNAME, mc.getprojectName());
-                values.put(MarkerTable.COLUMN_M_LAT, mc.getm_lat());
-                values.put(MarkerTable.COLUMN_M_LNG, mc.getm_lng());
-                values.put(MarkerTable.COLUMN_CLUSTER_CODE, mc.getcluster_code());
-                values.put(MarkerTable.COLUMN_HHNO, mc.gethhno());
-
-                db.insert(MarkerTable.TABLE_NAME, null, values);
-            }
-            db.close();
-
-        } catch (Exception e) {
-
-        }
-    }
-
-    public void syncDistricts(JSONArray mcList) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DistrictTable.TABLE_NAME, null, null);
-
-        try {
-            JSONArray jsonArray = mcList;
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObjectVR = jsonArray.getJSONObject(i);
-
-                DistrictContract dc = new DistrictContract();
-                dc.sync(jsonObjectVR);
-
-                ContentValues values = new ContentValues();
-
-                values.put(DistrictTable.COLUMN_PROJECTNAME, dc.getprojectName());
-                values.put(DistrictTable.COLUMN_GEOAREA, dc.getgeoarea());
-                values.put(DistrictTable.COLUMN_PCODE, dc.getpcode());
-
-                db.insert(DistrictTable.TABLE_NAME, null, values);
             }
             db.close();
 
