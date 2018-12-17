@@ -9,20 +9,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.Marker;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract.DistrictTable;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract.MarkerTable;
+import edu.aku.ramshasaeed.clusterfinal.Contracts.UsersContract.UsersTable;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract.singleVertices;
 
@@ -33,16 +30,15 @@ import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract.singleVertice
 public class FormsDBHelper extends SQLiteOpenHelper {
 
     // The name of database.
-    public static final String DATABASE_NAME = "Clusterfinal.db";
+    public static final String DATABASE_NAME = "CF-NNS2018.db";
     public static final String DB_NAME = DATABASE_NAME.replace(".db", "-copy.db");
-    public static final String FOLDER_NAME = "DMU-Clusterfinal";
+    public static final String FOLDER_NAME = "DMU-CF-NNS2018";
     // Change this when you change the database schema.
     private static final int DATABASE_VERSION = 1;
     public static String TAG = "FormsDBHelper";
-    public static String DB_FORM_ID;
+    public static final String PROJECT_NAME = "CF-NNS2018";
 
     // Create a table to hold Listings.
-
     final String SQL_CREATE_VERTICES_TABLE = "CREATE TABLE " + singleVertices.TABLE_NAME + " (" +
             singleVertices._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             singleVertices.COLUMN_CLUSTER_CODE + " TEXT," +
@@ -56,18 +52,23 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
     final String SQL_CREATE_MARKER_TABLE = "CREATE TABLE " + MarkerTable.TABLE_NAME + " (" +
             MarkerTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            MarkerTable.COLUMN_PROJECTNAME + " TEXT,"+
-            MarkerTable.COLUMN_M_LAT + " TEXT,"+
-            MarkerTable.COLUMN_M_LNG + " TEXT,"+
-            MarkerTable.COLUMN_CLUSTER_CODE + " TEXT,"+
-            MarkerTable.COLUMN_HHNO + " TEXT "+
+            MarkerTable.COLUMN_PROJECTNAME + " TEXT," +
+            MarkerTable.COLUMN_M_LAT + " TEXT," +
+            MarkerTable.COLUMN_M_LNG + " TEXT," +
+            MarkerTable.COLUMN_CLUSTER_CODE + " TEXT," +
+            MarkerTable.COLUMN_HHNO + " TEXT " +
             ");";
     final String SQL_CREATE_DISTRICTS_TABLE = "CREATE TABLE " + DistrictTable.TABLE_NAME + " (" +
             DistrictTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            DistrictTable.COLUMN_PROJECTNAME + " TEXT,"+
-            DistrictTable.COLUMN_GEOAREA + " TEXT,"+
-            DistrictTable.COLUMN_PCODE + " TEXT"+
+            DistrictTable.COLUMN_PROJECTNAME + " TEXT," +
+            DistrictTable.COLUMN_GEOAREA + " TEXT," +
+            DistrictTable.COLUMN_PCODE + " TEXT" +
             ");";
+
+    final String SQL_CREATE_USERS = "CREATE TABLE " + UsersTable.TABLE_NAME + "("
+            + UsersTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + UsersTable.ROW_USERNAME + " TEXT,"
+            + UsersTable.ROW_PASSWORD + " TEXT );";
 
     public FormsDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -77,8 +78,8 @@ public class FormsDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Do the creating of the databases.
+        db.execSQL(SQL_CREATE_USERS);
         db.execSQL(SQL_CREATE_VERTICES_TABLE);
-//        db.execSQL(SQL_CREATE_MARKER_TABLE);
         db.execSQL(SQL_CREATE_DISTRICTS_TABLE);
 
     }
@@ -88,34 +89,58 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         /*// Simply discard all old data and start over when upgrading.
         db.execSQL("DROP TABLE IF EXISTS " + ListingEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + singleTaluka.TABLE_NAME);
-        *//*db.execSQL("DROP TABLE IF EXISTS " + singlePSU.TABLE_NAME);*//*
-        db.execSQL("DROP TABLE IF EXISTS " + EnumBlockTable.TABLE_NAME);
-
-        db.execSQL("DROP TABLE IF EXISTS " + singleUser.TABLE_NAME);
-        onCreate(db);*/
-
-       /* switch (oldVersion) {
-            case 1:
-                db.execSQL(SQL_CREATE_VERTICES_TABLE);
-                db.execSQL(SQL_CREATE_MARKER_TABLE);
-
-        }*/
+        db.execSQL("DROP TABLE IF EXISTS " + EnumBlockTable.TABLE_NAME);*/
 
     }
 
-    public Long lastInsertId() {
-        Long id = null;
+    public void syncUsers(JSONArray userlist) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String qry = "SELECT last_insert_rowid()";
-        Cursor c = db.rawQuery(qry, null);
-        if (c != null && c.moveToFirst()) {
-            id = Long.valueOf(c.getString(0));
-            c.close();
-        } else {
-            id = Long.valueOf(-1);
-        }
+        db.delete(UsersTable.TABLE_NAME, null, null);
 
-        return id;
+        try {
+            JSONArray jsonArray = userlist;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObjectUser = jsonArray.getJSONObject(i);
+                String userName = jsonObjectUser.getString("username");
+                String password = jsonObjectUser.getString("password");
+
+                ContentValues values = new ContentValues();
+                values.put(UsersTable.ROW_USERNAME, userName);
+                values.put(UsersTable.ROW_PASSWORD, password);
+                db.insert(UsersTable.TABLE_NAME, null, values);
+            }
+            db.close();
+
+        } catch (Exception e) {
+        }
+    }
+
+
+    public boolean Login(String username, String password) throws SQLException {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+//        New value for one column
+        String[] columns = {
+                UsersTable._ID
+        };
+
+//        Which row to update, based on the ID
+        String selection = UsersTable.ROW_USERNAME + " = ?" + " AND " + UsersTable.ROW_PASSWORD + " = ?";
+        String[] selectionArgs = {username, password};
+        Cursor cursor = db.query(UsersTable.TABLE_NAME, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                selectionArgs,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                       //filter by row groups
+                null);                      //The sort order
+
+        int cursorCount = cursor.getCount();
+
+        cursor.close();
+        db.close();
+        return cursorCount > 0;
     }
 
     public ArrayList<Cursor> getData(String Query) {
@@ -166,6 +191,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
 
     }
+
     public Collection<MarkerContract> getAllMarkers() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
@@ -211,6 +237,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         }
         return allFC;
     }
+
     public Collection<VerticesContract> getVerticesByCluster(String cluster_code) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
@@ -225,7 +252,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_PSCODE
         };
 
-        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND ("+singleVertices.COLUMN_POLY_SEQ +" != '' OR "+singleVertices.COLUMN_POLY_SEQ+" != null)";
+        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND (" + singleVertices.COLUMN_POLY_SEQ + " != '' OR " + singleVertices.COLUMN_POLY_SEQ + " != null)";
         String[] whereArgs = {cluster_code};
         String groupBy = null;
         String having = null;
@@ -258,6 +285,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         }
         return allVC;
     }
+
     public Collection<VerticesContract> getMarkersByCluster(String cluster_code) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = null;
@@ -272,7 +300,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_PSCODE
         };
 
-        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND ("+singleVertices.COLUMN_POLY_SEQ +" == '' OR "+singleVertices.COLUMN_POLY_SEQ+" == null)";
+        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND (" + singleVertices.COLUMN_POLY_SEQ + " == '' OR " + singleVertices.COLUMN_POLY_SEQ + " == null)";
         String[] whereArgs = {cluster_code};
         String groupBy = null;
         String having = null;
@@ -351,9 +379,6 @@ public class FormsDBHelper extends SQLiteOpenHelper {
     }
 
 
-
-
-
     public void syncVertices(JSONArray vcList) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(singleVertices.TABLE_NAME, null, null);
@@ -385,6 +410,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
         }
     }
+
     public void syncMarkers(JSONArray mcList) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(MarkerTable.TABLE_NAME, null, null);
@@ -414,6 +440,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
         }
     }
+
     public void syncDistricts(JSONArray mcList) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(DistrictTable.TABLE_NAME, null, null);

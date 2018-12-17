@@ -1,10 +1,5 @@
 package edu.aku.ramshasaeed.clusterfinal.get;
 
-
-/**
- * Created by hassan.naqvi on 10/31/2016.
- */
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -20,30 +15,32 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
-import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 
-/**
- * Created by hassan.naqvi on 4/28/2016.
- */
-public class GetMarkers extends AsyncTask<String, String, String> {
-    private final String TAG = "GetVertices()";
+
+public class GetAllData extends AsyncTask<String, String, String> {
+
     HttpURLConnection urlConnection;
+    private String TAG = "";
     private Context mContext;
     private ProgressDialog pd;
+    private String syncClass, URL;
 
-    public GetMarkers(Context context) {
+
+    public GetAllData(Context context, String syncClass, String url) {
         mContext = context;
+        this.syncClass = syncClass;
+        this.URL = url;
+
+        TAG = "Get" + syncClass;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         pd = new ProgressDialog(mContext);
-        pd.setTitle("Syncing Cluster Marker");
-        pd.setMessage("Getting connected to Marker...");
+        pd.setTitle("Syncing " + syncClass);
+        pd.setMessage("Getting connected to server...");
         pd.show();
 
     }
@@ -55,7 +52,7 @@ public class GetMarkers extends AsyncTask<String, String, String> {
 
         URL url = null;
         try {
-            url = new URL(AppMain._HOST_URL + MarkerContract.MarkerTable._URI);
+            url = new URL(URL);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setReadTimeout(10000 /* milliseconds */);
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
@@ -67,7 +64,7 @@ public class GetMarkers extends AsyncTask<String, String, String> {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.i(TAG, "Marker In: " + line);
+                    Log.i(TAG, syncClass + " In: " + line);
                     result.append(line);
                 }
             }
@@ -87,14 +84,23 @@ public class GetMarkers extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
 
         //Do something with the JSON string
-
         if (result != null) {
             String json = result;
             if (json.length() > 0) {
-                FormsDBHelper db = new FormsDBHelper(mContext);
                 try {
                     JSONArray jsonArray = new JSONArray(json);
-                    db.syncMarkers(jsonArray);
+
+                    FormsDBHelper db = new FormsDBHelper(mContext);
+
+                    switch (syncClass) {
+                        case "User":
+                            db.syncUsers(jsonArray);
+                            break;
+                        case "Vertices":
+                            db.syncVertices(jsonArray);
+                            break;
+                    }
+
                     pd.setMessage("Received: " + jsonArray.length());
                     pd.show();
                 } catch (JSONException e) {
@@ -110,4 +116,5 @@ public class GetMarkers extends AsyncTask<String, String, String> {
             pd.show();
         }
     }
+
 }

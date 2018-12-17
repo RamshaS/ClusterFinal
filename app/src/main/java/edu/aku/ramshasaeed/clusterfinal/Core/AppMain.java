@@ -42,7 +42,7 @@ public class AppMain extends Application {
     public static String TAG = "AppMain";
     public static Boolean admin = false;
     public static String IMEI;
-    public static int hh01txt;
+    public static String cluster_no;
     public static String hh02txt;
     public static int hh03txt = 0;
     public static String hh07txt;

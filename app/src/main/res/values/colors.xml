@@ -1,8 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <!--<color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#FF4081</color>-->
     <color name="colorAccentAlpha">#24d60000</color>
     <color name="colorAccentGAlpha">#2400d600</color>
+
+    <color name="colorPrimaryDark">#142B77</color>
+    <color name="redforborder">#EF9A9A</color>
+    <!--<conamename="colorPrimary">#880E4F</color>-->
+    <color name="colorPrimary">#3071D5</color>
+    <color name="colorPrimaryLight">#448aff</color>
+    <color name="colorPrimaryAlpha">#607d8b</color>
+    <color name="colorAccent">#3f51b5</color>
+    <color name="pink_100">#9BD8FF</color>
+    <color name="colorHeading">#99FFCC</color>
+    <color name="colorRedsub">#d6ff8a80</color>
+    <color name="lightred">#FFEBEE</color>
+    <color name="colorPrimaryBeta">#00BCD4</color>
+
+    <color name="black">#000000</color>
+    <color name="blackOverlay">#66000000</color>
+    <color name="dullBlack">#292929</color>
+    <color name="grayOverlay">#7f7f7f7f</color>
+    <color name="gray">#7f7f7f</color>
+    <color name="whiteOverlay">#99ffffff</color>
+    <color name="dullWhile">#d6d6d6</color>
+    <color name="dullWhileOverlay">#99d6d6d6</color>
+    <color name="white">#ffffff</color>
+    <color name="colorText">#050505</color>
+
+    <color name="black_overlay">#66000000</color>
+
+    <color name="year">#999999</color>
+    <color name="title">#222222</color>
+    <color name="green">#4caf50</color>
+    <color name="red">#f44336</color>
+    <color name="brown">#795548</color>
+
+    <color name="softgreen">#43A047</color>
+    <color name="lime">#80cbc4</color>
+
+    <color name="selectedBlue">#2b3581</color>
+    <color name="blue">#0277BD</color>
+
+    <color name="status_bar_color">#FF000000</color>
+    <color name="layout_border_color">#FF111111</color>
+
+    <color name="darkBlue">#1565C0</color>
+    <color name="darkPink">#AD1457</color>
+    <color name="lightBlue">#29B6F6</color>
+    <color name="lightPink">#E91E63</color>
+
+    <color name="darkRed">#D50000</color>
+    <color name="lightOrange">#FFE0B2</color>
+
+
 </resources>

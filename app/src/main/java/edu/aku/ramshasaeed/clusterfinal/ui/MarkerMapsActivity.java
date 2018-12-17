@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal;
+package edu.aku.ramshasaeed.clusterfinal.ui;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,8 +34,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
+import edu.aku.ramshasaeed.clusterfinal.R;
 
 import static edu.aku.ramshasaeed.clusterfinal.Core.AppMain.hh02txt;
 
