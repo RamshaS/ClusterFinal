@@ -1,11 +1,9 @@
 package edu.aku.ramshasaeed.clusterfinal;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -19,13 +17,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.databinding.ActivityMainBinding;
-import edu.aku.ramshasaeed.clusterfinal.get.GetDistricts;
-import edu.aku.ramshasaeed.clusterfinal.get.GetMarkers;
 import edu.aku.ramshasaeed.clusterfinal.get.GetVertices;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,27 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        bi.btnOpenMarker.setOnClickListener(new View.OnClickListener(){
 
-            @Override
-            public void onClick(View view) {
-                FormsDBHelper db = new FormsDBHelper(MainActivity.this);
-                db.getAllMarkers();
-                Collection<MarkerContract> m = db.getMarkers(bi.txtPSU.getText().toString());
-
-                if(m.size() != 0){
-                    AppMain.hh02txt = bi.txtPSU.getText().toString();
-                    if (m.size() > 3) {
-                        startActivity(new Intent(MainActivity.this, MarkerMapsActivity.class));
-                    } else {
-                        Toast.makeText(MainActivity.this, "Cluster map do not exist  ", Toast.LENGTH_SHORT).show();
-                    }
-                }else {
-                    Toast.makeText(MainActivity.this, "No Coordinates Found For this cluster!!!", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
 
     }
     private boolean checkAndRequestPermissions() {

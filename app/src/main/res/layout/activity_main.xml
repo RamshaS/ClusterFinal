@@ -71,14 +71,6 @@
             android:drawableTint="@color/colorAccent"
             android:textSize="14sp"
             android:text="Open Map" />
-        <Button
-            android:id="@+id/btnOpenMarker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:enabled="false"
-            android:visibility="gone"
-            android:text="Open Marker" />
+
     </LinearLayout>
 </layout>
