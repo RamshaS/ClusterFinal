@@ -22,8 +22,7 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.MainActivity"
+        <activity android:name=".MainActivity"
             android:theme="@style/AppTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC9n7NDr0pp3p2_G5lX2CJ7L0A4jquKRPk" />
@@ -39,10 +37,9 @@
         <activity
             android:name=".ui.MapsActivity"
             android:theme="@style/AppTheme1"></activity>
-        <activity
-            android:name=".ui.MarkerMapsActivity"
-            android:theme="@style/AppTheme1"></activity>
+
         <activity android:name=".ui.ValidatorActivity"></activity>
+
     </application>
 
 </manifest>
