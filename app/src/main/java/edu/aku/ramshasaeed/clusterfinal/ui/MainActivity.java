@@ -7,6 +7,8 @@ import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.Collection;
@@ -22,6 +24,17 @@ import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
 public class MainActivity extends MenuActivity {
     ActivityMainBinding bi;
     FormsDBHelper db;
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem dbManager = menu.findItem(R.id.menu_openDB);
+
+        if (!AppMain.admin)
+            dbManager.setVisible(false);
+
+
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
