@@ -83,6 +83,8 @@ public class SyncDevice extends AsyncTask<Void, Integer, String> {
 
                 DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 
+                Toast.makeText(context, "App device syncing!!!", Toast.LENGTH_SHORT).show();
+
                 try {
                     jsonObject.addProperty("imei", AppMain.IMEI);
                     jsonObject.addProperty("appversion", AppMain.versionName + "." + AppMain.versionCode);

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.util.Collection;
 
+import edu.aku.ramshasaeed.clusterfinal.Contracts.BLRandomContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
@@ -20,6 +21,7 @@ import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
 
 public class MainActivity extends MenuActivity {
     ActivityMainBinding bi;
+    FormsDBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +29,30 @@ public class MainActivity extends MenuActivity {
         bi = DataBindingUtil.setContentView(this, R.layout.activity_main);
         bi.setCallback(this);
 
+        db = new FormsDBHelper(this);
+
     }
 
     public void openForm() {
         if (!validatorClass.EmptyTextBox(this, bi.txtPSU, "Enter Cluster"))
             return;
 
-        startActivity(new Intent(this, ValidatorActivity.class));
+        AppMain.hh02txt = bi.txtPSU.getText().toString();
+
+        BLRandomContract getBLData;
+        if (AppMain.PSUExist(bi.txtPSU.getText().toString())) {
+            getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString(), AppMain.hh03txt);
+        } else {
+            getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString());
+        }
+
+        if (getBLData != null) {
+            startActivity(new Intent(this, ValidatorActivity.class)
+                    .putExtra("blData", getBLData));
+        } else {
+            Toast.makeText(this, "Cluster don't exist!!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void openMap() {

@@ -28,45 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="@string/hh08a1"
-            android:visibility="gone" />
-
-        <RadioGroup
-            android:id="@+id/hh08a1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/hh08a1a"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:checked="true"
-                android:text="@string/yes"
-                android:visibility="gone" />
-
-            <RadioButton
-                android:id="@+id/hh08a1b"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/rfsd"
-                android:visibility="gone" />
-
-            <RadioButton
-                android:id="@+id/hh08a1c"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="@string/locked"
-                android:visibility="gone" />
-
-        </RadioGroup>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:text="@string/hh08" />
 
         <EditText
@@ -74,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:digits="@string/txtName"
+            android:enabled="false"
             android:hint="@string/hh08"
             android:inputType="text"
             android:maxLength="24" />

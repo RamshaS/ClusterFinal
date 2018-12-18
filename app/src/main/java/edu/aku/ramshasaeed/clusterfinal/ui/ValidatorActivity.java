@@ -1,18 +1,30 @@
 package edu.aku.ramshasaeed.clusterfinal.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.aku.ramshasaeed.clusterfinal.Contracts.BLRandomContract;
+import edu.aku.ramshasaeed.clusterfinal.Contracts.ListingFormContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
+import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
 import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
 
@@ -24,7 +36,6 @@ public class ValidatorActivity extends AppCompatActivity {
     TextView txtTeamNoWithFam;
     @BindView(R.id.hh08)
     EditText hh08;
-
 
     @BindView(R.id.hh18)
     EditText hh18;
@@ -47,31 +58,48 @@ public class ValidatorActivity extends AppCompatActivity {
     @BindView(R.id.hh27)
     EditText hh27;
 
+    BLRandomContract blData;
+    FormsDBHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_validator);
         ButterKnife.bind(this);
 
-        this.setTitle("FAMILY LISTING");
-//        txtTeamNoWithFam.setText("NNS-S" + String.format("%04d", AppMain.hh03txt) + "-H" + String.format("%03d", Integer.valueOf(AppMain.hh07txt)));
+        setContentUI();
 
     }
 
-    private void SaveDraft() {
+    public void setContentUI() {
+        this.setTitle("FAMILY LISTING");
+//        txtTeamNoWithFam.setText("NNS-S" + String.format("%04d", AppMain.hh03txt) + "-H" + String.format("%03d", Integer.valueOf(AppMain.hh07txt)));
 
-        /*AppMain.lc.setHh07(AppMain.hh07txt);
-        AppMain.lc.setHh08a1("1");
+        blData = (BLRandomContract) getIntent().getSerializableExtra("blData");
+        txtTeamNoWithFam.setText("NNS-S" + blData.getHh());
+        hh08.setText(blData.getHhhead());
+
+    }
+
+    private void SaveDraft() throws JSONException {
+
+        AppMain.lc = new ListingFormContract();
+        AppMain.lc.setTagId(AppMain.getTagName(this));
+        AppMain.lc.setAppVer(AppMain.versionName + "." + AppMain.versionCode);
+        AppMain.lc.setHhDT(new SimpleDateFormat("dd-MM-yy HH:mm:ss").format(new Date().getTime()));
+        AppMain.lc.setHh02(AppMain.hh02txt);
+        AppMain.lc.setUsername(AppMain.userEmail);
+        AppMain.lc.setDeviceID(Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID));
         AppMain.lc.setHh08(hh08.getText().toString());
-        AppMain.lc.setHh09(hh09.getText().toString());
-        AppMain.lc.setHh10(hh10a.isChecked() ? "1" : hh10b.isChecked() ? "2" : "0");
-        AppMain.lc.setHh11(hh11.getText().toString().isEmpty() ? "0" : hh11.getText().toString());
-        AppMain.lc.setHh12(hh12a.isChecked() ? "1" : hh12b.isChecked() ? "2" : "0");
-        AppMain.lc.setHh13(hh13.getText().toString().isEmpty() ? "0" : hh13.getText().toString());
-        AppMain.lc.setHh14(hh14a.isChecked() ? "1" : hh14b.isChecked() ? "2" : "0");
-        AppMain.lc.setHh15(hh15.getText().toString().isEmpty() ? "0" : hh15.getText().toString());
-        AppMain.lc.setHh16(hh16.getText().toString());
-        AppMain.lc.setIsNewHH(hh17.isChecked() ? "1" : "2");
+        setGPS();
+
+//        Data from service
+        AppMain.lc.setLuid(blData.getLUID());
+        AppMain.lc.setClusterCode(blData.getClusterCode());
+        AppMain.lc.setHh03(blData.getStructure());
+        AppMain.lc.setHh07(blData.getExtension());
+        AppMain.lc.setRandDT(blData.getRandomDT());
+        AppMain.lc.setSno(blData.getSno());
 
         JSONObject sA = new JSONObject();
         sA.put("hh18", hh18.getText().toString());
@@ -85,10 +113,37 @@ public class ValidatorActivity extends AppCompatActivity {
         sA.put("hh26", hh26.getText().toString());
         sA.put("hh27", hh27.getText().toString());
 
-        AppMain.lc.setCounter(String.valueOf(sA));
+        AppMain.lc.setSA(String.valueOf(sA));
 
-        Toast.makeText(this, "Saving Draft... Successful!", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "SaveDraft: Structure " + AppMain.lc.getHh03());*/
+        Log.d(TAG, "SaveDraft: Structure " + AppMain.lc.getHh03());
+    }
+
+    public void setGPS() {
+        SharedPreferences GPSPref = getSharedPreferences("GPSCoordinates", Context.MODE_PRIVATE);
+
+//        String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(GPSPref.getString("Time", "0"))).toString();
+
+        try {
+            String lat = GPSPref.getString("Latitude", "0");
+            String lang = GPSPref.getString("Longitude", "0");
+
+            if (lat == "0" && lang == "0") {
+                Toast.makeText(this, "Could not obtained GPS points", Toast.LENGTH_SHORT).show();
+            }
+
+            String date = DateFormat.format("dd-MM-yyyy HH:mm", Long.parseLong(GPSPref.getString("Time", "0"))).toString();
+
+            AppMain.lc.setGPSLat(GPSPref.getString("Latitude", "0"));
+            AppMain.lc.setGPSLng(GPSPref.getString("Longitude", "0"));
+            AppMain.lc.setGPSAcc(GPSPref.getString("Accuracy", "0"));
+            AppMain.lc.setGPSAlt(GPSPref.getString("Altitude", "0"));
+            AppMain.lc.setGPSTime(date); // Timestamp is converted to date above
+
+            Toast.makeText(this, "GPS set", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Log.e(TAG, "setGPS: " + e.getMessage());
+        }
 
     }
 
@@ -157,7 +212,6 @@ public class ValidatorActivity extends AppCompatActivity {
         return validatorClass.RangeTextBox(this, hh23, 0, 99, getString(R.string.hh23), "Deaths");
     }
 
-
     @OnClick(R.id.btnNextHH)
     void onBtnNextHHClick() {
         if (formValidation()) {
@@ -168,11 +222,11 @@ public class ValidatorActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             if (UpdateDB()) {
-                AppMain.hh07txt = String.valueOf(Integer.valueOf(AppMain.hh07txt) + 1);
-//                AppMain.lc.setHh07(AppMain.hh07txt);
-
                 finish();
-                Intent fA = new Intent(this, ValidatorActivity.class);
+
+                BLRandomContract getBLData = db.lastBLRandomRecord(blData.getClusterCode(), blData.getHh());
+                Intent fA = new Intent(this, ValidatorActivity.class)
+                        .putExtra("blData", getBLData);
                 startActivity(fA);
             }
 
@@ -181,14 +235,13 @@ public class ValidatorActivity extends AppCompatActivity {
     }
 
     private boolean UpdateDB() {
-        /*FormsDBHelper db = new FormsDBHelper(this);
+        db = new FormsDBHelper(this);
 
-        long updcount = db.addForm(AppMain.lc);
+        long updcount = db.addForm(AppMain.lc, blData.getHh());
 
         AppMain.lc.setID(String.valueOf(updcount));
 
         if (updcount != 0) {
-            Toast.makeText(this, "Updating Database... Successful!", Toast.LENGTH_SHORT).show();
 
             AppMain.lc.setUID(
                     (AppMain.lc.getDeviceID() + AppMain.lc.getID()));
@@ -197,14 +250,16 @@ public class ValidatorActivity extends AppCompatActivity {
 
         } else {
             Toast.makeText(this, "Updating Database... ERROR!", Toast.LENGTH_SHORT).show();
-        }*/
+        }
+
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(getApplicationContext(), "Back Button NOT Allowed!", Toast.LENGTH_SHORT).show();
-
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
 }

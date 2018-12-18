@@ -88,6 +88,7 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
 
+            Toast.makeText(this, "Syncing start..", Toast.LENGTH_LONG).show();
             new SyncDevice(this, true).execute();
 
         } else {
@@ -176,7 +177,7 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
                     db.getUnsyncedForms()
             ).execute();*/
 
-            Toast.makeText(this, "Syncing Start.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Device Syncing..", Toast.LENGTH_SHORT).show();
             new SyncDevice(this, false).execute();
 
             SharedPreferences syncPref = getSharedPreferences("SyncInfo", Context.MODE_PRIVATE);

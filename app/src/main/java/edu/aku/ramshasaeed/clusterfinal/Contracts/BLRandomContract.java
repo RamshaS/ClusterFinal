@@ -7,13 +7,16 @@ import android.provider.BaseColumns;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BLRandomContract {
+import java.io.Serializable;
+
+public class BLRandomContract implements Serializable {
 
     private static final String TAG = "BLRandom_CONTRACT";
 
+    private String col_ID;
     private String _ID;
     private String LUID;
-    private String subVillageCode; // hh02
+    private String clusterCode; // hh02
     private String structure;  // Structure
     private String extension; // Extension
     private String hh;
@@ -26,24 +29,10 @@ public class BLRandomContract {
     public BLRandomContract() {
     }
 
-    public BLRandomContract(BLRandomContract rnd) {
-        this._ID = rnd.get_ID();
-        this.LUID = rnd.getLUID();
-        this.subVillageCode = rnd.getSubVillageCode();
-        this.structure = rnd.getStructure();
-        this.extension = rnd.getExtension();
-        this.hh = rnd.getHh();
-        this.hhhead = rnd.getHhhead();
-        this.randomDT = rnd.getRandomDT();
-        this.contact = rnd.getContact();
-        this.selStructure = rnd.getSelStructure();
-        this.sno = rnd.getSno();
-    }
-
     public BLRandomContract Sync(JSONObject jsonObject) throws JSONException {
-        this._ID = jsonObject.getString(singleRandomHH.COLUMN_ID);
+        this._ID = jsonObject.getString(singleRandomHH.COLUMN_NAME_ID);
         this.LUID = jsonObject.getString(singleRandomHH.COLUMN_LUID);
-        this.subVillageCode = jsonObject.getString(singleRandomHH.COLUMN_ENUM_BLOCK_CODE);
+        this.clusterCode = jsonObject.getString(singleRandomHH.COLUMN_CLUSTER_CODE);
         this.structure = jsonObject.getString(singleRandomHH.COLUMN_STRUCTURE_NO);
 
         this.structure = String.format("%04d", Integer.valueOf(this.structure));
@@ -61,9 +50,10 @@ public class BLRandomContract {
     }
 
     public BLRandomContract Hydrate(Cursor cursor) {
-        this._ID = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_ID));
+        this.col_ID = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_COL_ID));
+        this._ID = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_NAME_ID));
         this.LUID = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_LUID));
-        this.subVillageCode = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_ENUM_BLOCK_CODE));
+        this.clusterCode = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_CLUSTER_CODE));
         this.structure = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_STRUCTURE_NO));
         this.extension = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_FAMILY_EXT_CODE));
         this.hh = cursor.getString(cursor.getColumnIndex(singleRandomHH.COLUMN_HH));
@@ -92,12 +82,12 @@ public class BLRandomContract {
         this.LUID = LUID;
     }
 
-    public String getSubVillageCode() {
-        return subVillageCode;
+    public String getClusterCode() {
+        return clusterCode;
     }
 
-    public void setSubVillageCode(String subVillageCode) {
-        this.subVillageCode = subVillageCode;
+    public void setClusterCode(String clusterCode) {
+        this.clusterCode = clusterCode;
     }
 
     public String getStructure() {
@@ -164,20 +154,28 @@ public class BLRandomContract {
         this.sno = sno;
     }
 
+    public String getCol_ID() {
+        return col_ID;
+    }
+
+    public void setCol_ID(String col_ID) {
+        this.col_ID = col_ID;
+    }
+
     public static abstract class singleRandomHH implements BaseColumns {
 
         public static final String TABLE_NAME = "BLRandom";
-        public static final String COLUMN_ID = "_id";
+        public static final String COLUMN_COL_ID = "a_id";
+        public static final String COLUMN_NAME_ID = "_id";
         public static final String COLUMN_RANDOMDT = "randDT";
         public static final String COLUMN_LUID = "UID";
-        public static final String COLUMN_ENUM_BLOCK_CODE = "hh02";
+        public static final String COLUMN_CLUSTER_CODE = "hh02";
         public static final String COLUMN_STRUCTURE_NO = "hh03";
         public static final String COLUMN_FAMILY_EXT_CODE = "hh07";
         public static final String COLUMN_HH = "hh";
         public static final String COLUMN_HH_HEAD = "hh08";
         public static final String COLUMN_CONTACT = "hh09";
         public static final String COLUMN_HH_SELECTED_STRUCT = "hhss";
-
         public static final String COLUMN_SNO_HH = "sno";
 
         public static String _URI = "bl_listings.php";

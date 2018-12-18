@@ -18,6 +18,8 @@ import android.view.View;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.aku.ramshasaeed.clusterfinal.Contracts.ListingFormContract;
+
 
 /**
  * Created by hassan.naqvi on 10/15/2016.
@@ -44,18 +46,8 @@ public class AppMain extends Application {
     public static String IMEI;
     public static String cluster_no;
     public static String hh02txt;
-    public static int hh03txt = 0;
-    public static String hh07txt;
-    public static int fCount = 0;
-    public static int fTotal = 0;
-    public static int cCount = 0;
-
-    public static String enumCode = "";
-    public static String clusterCode = "";
-    public static String enumStr = "";
-
-    public static int hh07 = 0;
-    public static int cTotal = 0;
+    public static String hh03txt;
+    public static ListingFormContract lc;
     public static SharedPreferences sharedPref;
     public static String userEmail;
     public static int versionCode;
@@ -76,10 +68,10 @@ public class AppMain extends Application {
 
     public static Boolean PSUExist(String psuCode) {
         Log.d(TAG, "PSUExist: " + psuCode);
-        AppMain.hh03txt = Integer.valueOf(sharedPref.getString(psuCode, "0"));
+        AppMain.hh03txt = sharedPref.getString(psuCode, "0");
         Log.d(TAG, "PSUExist (Test): " + sharedPref.getString(psuCode, "0"));
 
-        if (AppMain.hh03txt == 0) {
+        if (AppMain.hh03txt.equals("0")) {
             Log.d(TAG, "PSUExist (False): " + AppMain.hh03txt);
 
             return false;
