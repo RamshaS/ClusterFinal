@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import edu.aku.ramshasaeed.clusterfinal.Contracts.BLRandomContract;
+import edu.aku.ramshasaeed.clusterfinal.Contracts.ListingFormContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.UsersContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.AndroidDatabaseManager;
@@ -32,6 +33,7 @@ import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
 import edu.aku.ramshasaeed.clusterfinal.get.GetAllData;
+import edu.aku.ramshasaeed.clusterfinal.sync.SyncAllData;
 import edu.aku.ramshasaeed.clusterfinal.sync.SyncDevice;
 
 public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDevicInterface {
@@ -166,19 +168,18 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
 
-            /*FormsDBHelper db = new FormsDBHelper(this);
+            Toast.makeText(this, "Device Syncing..", Toast.LENGTH_SHORT).show();
+            new SyncDevice(this, false).execute();
+
             Toast.makeText(getApplicationContext(), "Syncing Forms", Toast.LENGTH_SHORT).show();
             new SyncAllData(
                     this,
                     "Forms",
                     "updateSyncedForms",
-                    FormsContract.class,
-                    MainApp._HOST_URL + FormsContract.FormsTable._URL,
-                    db.getUnsyncedForms()
-            ).execute();*/
-
-            Toast.makeText(this, "Device Syncing..", Toast.LENGTH_SHORT).show();
-            new SyncDevice(this, false).execute();
+                    ListingFormContract.class,
+                    AppMain._HOST_URL + ListingFormContract.ListingFormEntry._URL,
+                    db.getAllFormListings()
+            ).execute();
 
             SharedPreferences syncPref = getSharedPreferences("SyncInfo", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = syncPref.edit();
