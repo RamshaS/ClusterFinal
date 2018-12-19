@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal;
+package edu.aku.ramshasaeed.vasadata;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -32,18 +31,16 @@ import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Map;
 
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
-import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
-import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
+import edu.aku.ramshasaeed.vasadata.Contracts.MarkerContract;
+import edu.aku.ramshasaeed.vasadata.Contracts.VerticesContract;
+import edu.aku.ramshasaeed.vasadata.Core.FormsDBHelper;
 
-import static edu.aku.ramshasaeed.clusterfinal.Core.AppMain.*;
+import static edu.aku.ramshasaeed.vasadata.Core.AppMain.hh02txt;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MarkerMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private static final float DEFAULT_ZOOM = 17;
     private static final String TAG = "MAY";
@@ -61,23 +58,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LatLng mDefaultLocation;
     private ArrayList<LatLng> houseHold;
-    private ArrayList<LatLng> clusterPoints;
+//    private ArrayList<LatLng> clusterPoints;
     private ArrayList<LatLng> mclusterPoints;
+    private ArrayList<String> householdPoints;
     private ArrayList<LatLng> newClusterPoints;
     private ArrayList<LatLng> ucPoints;
     private PolygonOptions polygon102;
-    private LatLng clusterStart;
-    private String clusterName;
-    private ArrayList<String> householdPoints;
-    private Polygon redPolygon, greenPolygon;
+//    private LatLng clusterStart;
+    private LatLng mclusterStart;
+//    private String clusterName;
+    private String mclusterName;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_marker_maps);
 
         db = new FormsDBHelper(this);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -102,26 +101,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         );
 
 
-        clusterPoints = new ArrayList<LatLng>();
+//        clusterPoints = new ArrayList<LatLng>();
         mclusterPoints = new ArrayList<LatLng>();
-        newClusterPoints = new ArrayList<LatLng>();
         householdPoints = new ArrayList<String>();
+        newClusterPoints = new ArrayList<LatLng>();
         ucPoints = new ArrayList<LatLng>();
 
-        Collection<VerticesContract> vc = db.getVerticesByCluster(hh02txt);
-        Collection<VerticesContract> mc = db.getMarkersByCluster(hh02txt);
+//        Collection<VerticesContract> vc = db.getVerticesByCluster(hh02txt);
+        Collection<MarkerContract> mc = db.getMarkers(hh02txt);
 
-        for (VerticesContract v : vc) {
+      /*  for (VerticesContract v : vc) {
             clusterName = v.getCluster_code();
             clusterPoints.add(new LatLng(v.getPoly_lat(), v.getPoly_lng()));
-
+        }*/
+        for (MarkerContract mv : mc) {
+            mclusterName = mv.getcluster_code();
+            mclusterPoints.add(new LatLng(Double.valueOf(mv.getm_lat()), Double.valueOf(mv.getm_lng())));
+            householdPoints.add(mv.gethhno());
         }
-        for (VerticesContract v : mc) {
-//            clusterName = v.getCluster_code();
-            mclusterPoints.add(new LatLng(v.getPoly_lat(), v.getPoly_lng()));
-            householdPoints.add(v.getmarker_hh());
-        }
-        clusterStart = (clusterPoints.get(0));
+        mclusterStart = (mclusterPoints.get(0));
+//        clusterStart = (clusterPoints.get(0));
        /* Collection<VerticesUCContract> vcuc = db.getVerticesByUC(AppMain.hh01txt);
         for (VerticesUCContract v : vcuc) {
             ucPoints.add(new LatLng(v.getPoly_lat(), v.getPoly_lng()));
@@ -145,8 +144,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void showGPSCoordinates(View v) {
         showCurrentLocation();
-
-
     }
 
     protected boolean isBetterLocation(Location location, Location currentBestLocation) {
@@ -214,33 +211,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .anchor(0.5f, 1)
                 .title(title));
     }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
         // Get the current location of the device and set the position of the map.
         // Add a marker in Sydney and move the camera
-
-     /*   Marker clusterMarker = mMap.addMarker(new MarkerOptions()
+       /* Marker clusterMarker = mMap.addMarker(new MarkerOptions()
                 .position(clusterStart)
                 .title(clusterName)
                 .anchor(0.5f, 1)
         );*/
-        Marker mhhMarker;
-        for (int i = 0; i < mclusterPoints.size(); i++) {
-            mhhMarker = createMarker(mclusterPoints.get(i), householdPoints.get(i));
-            mhhMarker.showInfoWindow();
-            mhhMarker.setTag(0);
+
+
+//        clusterMarker.showInfoWindow();
+
+        Marker mclusterMarker;
+        for(int i = 0 ; i < mclusterPoints.size() ; i++) {
+            mclusterMarker = createMarker(mclusterPoints.get(i), householdPoints.get(i));
+            mclusterMarker.showInfoWindow();
+            mclusterMarker.setTag(0);
         }
+        /*Marker mclusterMarker = mMap.addMarker(new MarkerOptions()
+                .position(mclusterStart)
+                .title(mclusterName)
+                .anchor(0.5f, 1)
+        );*/
+
+
 
 
         // Instantiates a new Polyline object and adds clusterPoints to define a rectangle
-        PolygonOptions rectCluster = new PolygonOptions()
+       /* PolygonOptions rectCluster = new PolygonOptions()
                 .fillColor(getResources().getColor(R.color.colorAccentAlpha))
                 .strokeColor(Color.RED)
                 .zIndex(2.0f);
-        rectCluster.addAll(clusterPoints);
+        rectCluster.addAll(clusterPoints);*/
+
+ /*       PolygonOptions rectCluster = new PolygonOptions()
+                .fillColor(getResources().getColor(R.color.colorAccentAlpha))
+                .strokeColor(Color.RED)
+                .zIndex(2.0f);
+        rectCluster.addAll(mclusterPoints);*/
 /*
         PolygonOptions rectUC = new PolygonOptions()
                 .fillColor(getResources().getColor(R.color.dullBlueOverlay))
@@ -252,11 +264,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 // Get back the mutable Polyline
         // Cluster Poly
-/*        Polygon polyCluster = mMap.addPolygon(rectCluster);
+      /*  Polygon polyCluster = mMap.addPolygon(rectCluster);
         polyCluster.setGeodesic(true);*/
-        redPolygon = mMap.addPolygon(rectCluster);
-        redPolygon.setGeodesic(true);
-
         // UC Poly
        /* Polygon polyUC = mMap.addPolygon(rectUC);
         polyUC.setGeodesic(true);*/
@@ -264,7 +273,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(clusterPoints.get(0), DEFAULT_ZOOM));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(clusterPoints.get(0), DEFAULT_ZOOM));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mclusterPoints.get(0), DEFAULT_ZOOM));
 
         //DRAW CLUSTER
        /* mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -285,36 +295,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });*/
-
-
-/*
-//        mDefaultLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            mDefaultLocation = new LatLng(24.89861595, 67.08128572);
-//        updateCameraBearing(mMap, location.getBearing());
-
-        if (PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false)) {
-
-
-
-// Get back the mutable Polyline
-            // Cluster Poly
-
-            polyCluster = mMap.addPolygon(addGreenPolygon(clusterPoints));
-
-
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(24.89861595, 67.08128572), 20));
-
-
-        } else if (polyCluster != null && !(PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false))) {
-            polyCluster = mMap.addPolygon(addRedPolygon(clusterPoints));
-            polyCluster.remove();
-            polyCluster = null;
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(clusterPoints.get(0), DEFAULT_ZOOM));
-
-
-        }*/
-
-
     }
 
     private void updateCameraBearing(GoogleMap googleMap, float bearing) {
@@ -327,36 +307,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
     }
-    PolygonOptions addRedPolygon(ArrayList<LatLng> clusterPoints){
-    PolygonOptions rectCluster = new PolygonOptions()
-            .fillColor(getResources().getColor(R.color.colorAccentAlpha))
-            .strokeColor(Color.RED)
-            .zIndex(2.0f);
-    rectCluster.addAll(clusterPoints);
-        return rectCluster;
 
-    }
-    PolygonOptions addGreenPolygon(ArrayList<LatLng> clusterPoints){
-    PolygonOptions rectSCluster = new PolygonOptions()
-            .fillColor(getResources().getColor(R.color.colorAccentGAlpha))
-            .strokeColor(Color.GREEN)
-            .zIndex(2.0f);
-    rectSCluster.addAll(clusterPoints);
-    return rectSCluster;
-}
     private class MyLocationListener implements LocationListener {
 
         Polygon polySCluster = null;
 
 
         public void onLocationChanged(Location location) {
-//            changePolygonColor(new LatLng(24.89941909084409,67.08076000213624));
-
             mDefaultLocation = new LatLng(location.getLatitude(), location.getLongitude());
-//            mDefaultLocation = new LatLng(25, 67);
             updateCameraBearing(mMap, location.getBearing());
 
-            if (PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false)) {
+         /*   if (polySCluster == null && PolyUtil.containsLocation(mDefaultLocation, clusterPoints, false)) {
                 PolygonOptions rectSCluster = new PolygonOptions()
                         .fillColor(getResources().getColor(R.color.colorAccentGAlpha))
                         .strokeColor(Color.GREEN)
@@ -366,7 +327,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 // Get back the mutable Polyline
                 // Cluster Poly
-
                 polySCluster = mMap.addPolygon(rectSCluster);
 
 
@@ -378,6 +338,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 polySCluster.remove();
                 polySCluster = null;
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(clusterPoints.get(0), DEFAULT_ZOOM));
+
+            }*/
+
+            if (polySCluster == null && PolyUtil.containsLocation(mDefaultLocation, mclusterPoints, false)) {
+                PolygonOptions rectSCluster = new PolygonOptions()
+                        .fillColor(getResources().getColor(R.color.colorAccentGAlpha))
+                        .strokeColor(Color.GREEN)
+                        .zIndex(2.0f);
+                rectSCluster.addAll(mclusterPoints);
+
+
+// Get back the mutable Polyline
+                // Cluster Poly
+                polySCluster = mMap.addPolygon(rectSCluster);
+
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 20));
+
+
+            } else if (polySCluster != null && !(PolyUtil.containsLocation(mDefaultLocation, mclusterPoints, false))) {
+
+                polySCluster.remove();
+                polySCluster = null;
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mclusterPoints.get(0), DEFAULT_ZOOM));
 
             }
 

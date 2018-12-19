@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal.Core;
+package edu.aku.ramshasaeed.vasadata.Core;
 
 import android.Manifest;
 import android.app.Application;

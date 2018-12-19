@@ -9,7 +9,7 @@
 
         <variable
             name="callback"
-            type="edu.aku.ramshasaeed.clusterfinal.MainActivity" />
+            type="edu.aku.ramshasaeed.vasadata.MainActivity" />
     </data>
 
     <LinearLayout

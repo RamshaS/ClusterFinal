@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal.get;
+package edu.aku.ramshasaeed.vasadata.get;
 
 
 /**
@@ -20,21 +20,21 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
-import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
-import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
+import edu.aku.ramshasaeed.vasadata.Contracts.MarkerContract;
+import edu.aku.ramshasaeed.vasadata.Contracts.VerticesContract;
+import edu.aku.ramshasaeed.vasadata.Core.AppMain;
+import edu.aku.ramshasaeed.vasadata.Core.FormsDBHelper;
 
 /**
  * Created by hassan.naqvi on 4/28/2016.
  */
-public class GetDistricts extends AsyncTask<String, String, String> {
+public class GetMarkers extends AsyncTask<String, String, String> {
     private final String TAG = "GetVertices()";
     HttpURLConnection urlConnection;
     private Context mContext;
     private ProgressDialog pd;
 
-    public GetDistricts(Context context) {
+    public GetMarkers(Context context) {
         mContext = context;
     }
 
@@ -55,7 +55,7 @@ public class GetDistricts extends AsyncTask<String, String, String> {
 
         URL url = null;
         try {
-            url = new URL(AppMain._HOST_URL + DistrictContract.DistrictTable._URI);
+            url = new URL(AppMain._HOST_URL + MarkerContract.MarkerTable._URI);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setReadTimeout(10000 /* milliseconds */);
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
@@ -94,7 +94,7 @@ public class GetDistricts extends AsyncTask<String, String, String> {
                 FormsDBHelper db = new FormsDBHelper(mContext);
                 try {
                     JSONArray jsonArray = new JSONArray(json);
-                    db.syncDistricts(jsonArray);
+                    db.syncMarkers(jsonArray);
                     pd.setMessage("Received: " + jsonArray.length());
                     pd.show();
                 } catch (JSONException e) {

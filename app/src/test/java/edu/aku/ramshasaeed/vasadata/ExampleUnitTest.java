@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal;
+package edu.aku.ramshasaeed.vasadata;
 
 import org.junit.Test;
 

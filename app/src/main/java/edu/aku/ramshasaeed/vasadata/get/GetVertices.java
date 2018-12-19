@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal.get;
+package edu.aku.ramshasaeed.vasadata.get;
 
 
 /**
@@ -19,22 +19,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
-import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
-import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
+import edu.aku.ramshasaeed.vasadata.Contracts.VerticesContract;
+import edu.aku.ramshasaeed.vasadata.Core.AppMain;
+import edu.aku.ramshasaeed.vasadata.Core.FormsDBHelper;
 
 /**
  * Created by hassan.naqvi on 4/28/2016.
  */
-public class GetMarkers extends AsyncTask<String, String, String> {
+public class GetVertices extends AsyncTask<String, String, String> {
     private final String TAG = "GetVertices()";
     HttpURLConnection urlConnection;
     private Context mContext;
     private ProgressDialog pd;
 
-    public GetMarkers(Context context) {
+    public GetVertices(Context context) {
         mContext = context;
     }
 
@@ -42,8 +40,8 @@ public class GetMarkers extends AsyncTask<String, String, String> {
     protected void onPreExecute() {
         super.onPreExecute();
         pd = new ProgressDialog(mContext);
-        pd.setTitle("Syncing Cluster Marker");
-        pd.setMessage("Getting connected to Marker...");
+        pd.setTitle("Syncing Cluster Vertices");
+        pd.setMessage("Getting connected to server...");
         pd.show();
 
     }
@@ -55,7 +53,7 @@ public class GetMarkers extends AsyncTask<String, String, String> {
 
         URL url = null;
         try {
-            url = new URL(AppMain._HOST_URL + MarkerContract.MarkerTable._URI);
+            url = new URL(AppMain._HOST_URL + VerticesContract.singleVertices._URI);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setReadTimeout(10000 /* milliseconds */);
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
@@ -67,7 +65,7 @@ public class GetMarkers extends AsyncTask<String, String, String> {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.i(TAG, "Marker In: " + line);
+                    Log.i(TAG, "Vertices In: " + line);
                     result.append(line);
                 }
             }
@@ -94,7 +92,7 @@ public class GetMarkers extends AsyncTask<String, String, String> {
                 FormsDBHelper db = new FormsDBHelper(mContext);
                 try {
                     JSONArray jsonArray = new JSONArray(json);
-                    db.syncMarkers(jsonArray);
+                    db.syncVertices(jsonArray);
                     pd.setMessage("Received: " + jsonArray.length());
                     pd.show();
                 } catch (JSONException e) {

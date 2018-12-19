@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal.Contracts;
+package edu.aku.ramshasaeed.vasadata.Contracts;
 
 import android.database.Cursor;
 import android.provider.BaseColumns;

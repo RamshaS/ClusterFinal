@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal;
+package edu.aku.ramshasaeed.vasadata;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("edu.aku.ramshasaeed.clusterfinal", appContext.getPackageName());
+        assertEquals("edu.aku.ramshasaeed.vasadata", appContext.getPackageName());
     }
 }

@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal.Core;
+package edu.aku.ramshasaeed.vasadata.Core;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,12 +19,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract.DistrictTable;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.MarkerContract.MarkerTable;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
-import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract.singleVertices;
+import edu.aku.ramshasaeed.vasadata.Contracts.DistrictContract;
+import edu.aku.ramshasaeed.vasadata.Contracts.DistrictContract.DistrictTable;
+import edu.aku.ramshasaeed.vasadata.Contracts.MarkerContract;
+import edu.aku.ramshasaeed.vasadata.Contracts.MarkerContract.MarkerTable;
+import edu.aku.ramshasaeed.vasadata.Contracts.VerticesContract;
+import edu.aku.ramshasaeed.vasadata.Contracts.VerticesContract.singleVertices;
 
 
 /**
@@ -33,9 +33,9 @@ import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract.singleVertice
 public class FormsDBHelper extends SQLiteOpenHelper {
 
     // The name of database.
-    public static final String DATABASE_NAME = "Clusterfinal.db";
+    public static final String DATABASE_NAME = "vasadata.db";
     public static final String DB_NAME = DATABASE_NAME.replace(".db", "-copy.db");
-    public static final String FOLDER_NAME = "DMU-Clusterfinal";
+    public static final String FOLDER_NAME = "DMU-vasadata";
     // Change this when you change the database schema.
     private static final int DATABASE_VERSION = 1;
     public static String TAG = "FormsDBHelper";

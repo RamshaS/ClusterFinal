@@ -7,7 +7,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "edu.aku.ramshasaeed.clusterfinal"
+        applicationId "edu.aku.ramshasaeed.vasadata"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
