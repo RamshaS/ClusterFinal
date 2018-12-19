@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import edu.aku.ramshasaeed.clusterfinal.Contracts.BLRandomContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.BLRandomContract.singleRandomHH;
@@ -293,6 +294,26 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 values,
                 where,
                 whereArgs);
+    }
+
+    public void updateSyncedListing(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+// New value for one column
+        ContentValues values = new ContentValues();
+        values.put(ListingFormEntry.COLUMN_SYNCED, true);
+        values.put(ListingFormEntry.COLUMN_SYNCED_DATE, new Date().toString());
+
+// Which row to update, based on the title
+        String where = ListingFormEntry._ID + " LIKE ?";
+        String[] whereArgs = {id};
+
+        int count = db.update(
+                ListingFormEntry.TABLE_NAME,
+                values,
+                where,
+                whereArgs);
+        db.close();
     }
 
     public Collection<BLRandomContract> getAllBLRandom(String hh) {

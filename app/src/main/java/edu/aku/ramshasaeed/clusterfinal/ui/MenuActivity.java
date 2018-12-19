@@ -43,6 +43,7 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
     String dtToday = new SimpleDateFormat("dd-MM-yy HH:mm").format(new Date().getTime());
     String DirectoryName;
     FormsDBHelper db;
+    boolean flagSync = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +91,11 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
 
+            flagSync = true;
+
             Toast.makeText(this, "Syncing start..", Toast.LENGTH_LONG).show();
             new SyncDevice(this, true).execute();
+
 
         } else {
             Toast.makeText(this, "No network connection available.", Toast.LENGTH_SHORT).show();
@@ -168,6 +172,8 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
 
+            flagSync = false;
+
             Toast.makeText(this, "Device Syncing..", Toast.LENGTH_SHORT).show();
             new SyncDevice(this, false).execute();
 
@@ -175,9 +181,9 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
             new SyncAllData(
                     this,
                     "Forms",
-                    "updateSyncedForms",
+                    "updateSyncedListing",
                     ListingFormContract.class,
-                    AppMain._HOST_URL + ListingFormContract.ListingFormEntry._URL,
+                    AppMain._HOST_URL + ListingFormContract.ListingFormEntry._URL + "?tab=listing_form",
                     db.getAllFormListings()
             ).execute();
 
@@ -196,7 +202,7 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
 
     @Override
     public void processFinish(boolean flag) {
-        if (flag) {
+        if (flag && flagSync) {
             HashMap<String, String> tagVal = AppMain.getTagValues(this);
             new syncData(this, tagVal.get("org") != null ? tagVal.get("org").equals("null") ? null : tagVal.get("org") : null).execute();
         }

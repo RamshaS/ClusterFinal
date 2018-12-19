@@ -29,15 +29,14 @@ public class AppMain extends Application {
 
     // GPS Related Field Variables
 
-    //public static String _IP = "10.1.42.30"; // Testing Server
-    public static String _IP = "43.245.131.159"; // Test PHP server
-    public static String _IP2 = "58.65.211.13"; // Test PHP server
-
     public static final Integer _PORT = 8080; // Port - with colon (:)
+    public static final String _IP = "43.245.131.159:" + _PORT + "/"; // Test PHP server
+    public static final String _TEST_IP = "10.1.42.30" + "/"; // Linux server
+
     private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    public static String _HOST_URL = "http://" + AppMain._IP + ":" + AppMain._PORT + "/nns/api/";
+    public static String _HOST_URL = "http://" + AppMain._IP + "/nns/api/";
     public static String _UPDATE_URL = "http://" + AppMain._IP + ":" + AppMain._PORT + "/nns/app/linelisting/";
     public static String DeviceURL = "devices.php";
 
