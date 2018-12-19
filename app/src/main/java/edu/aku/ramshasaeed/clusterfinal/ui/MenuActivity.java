@@ -183,7 +183,7 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
                     "Forms",
                     "updateSyncedListing",
                     ListingFormContract.class,
-                    AppMain._HOST_URL + ListingFormContract.ListingFormEntry._URL + "?tab=listing_form",
+                    AppMain._HOST_URL + ListingFormContract.ListingFormEntry._URL,
                     db.getAllFormListings()
             ).execute();
 
