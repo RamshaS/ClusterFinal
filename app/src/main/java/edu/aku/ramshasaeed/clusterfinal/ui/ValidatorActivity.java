@@ -37,6 +37,8 @@ public class ValidatorActivity extends AppCompatActivity {
     @BindView(R.id.hh08)
     EditText hh08;
 
+    @BindView(R.id.hh16)
+    EditText hh16;
     @BindView(R.id.hh18)
     EditText hh18;
     @BindView(R.id.hh19)
@@ -102,6 +104,7 @@ public class ValidatorActivity extends AppCompatActivity {
         AppMain.lc.setSno(blData.getSno());
 
         JSONObject sA = new JSONObject();
+        sA.put("hh16", hh16.getText().toString());
         sA.put("hh18", hh18.getText().toString());
         sA.put("hh19", hh19.getText().toString());
         sA.put("hh20", hh20.getText().toString());
@@ -148,6 +151,10 @@ public class ValidatorActivity extends AppCompatActivity {
     }
 
     private boolean formValidation() {
+
+        if (!validatorClass.EmptyTextBox(this, hh16, getString(R.string.hh16))) {
+            return false;
+        }
 
         if (!validatorClass.EmptyTextBox(this, hh18, getString(R.string.hh18))) {
             return false;
@@ -209,7 +216,15 @@ public class ValidatorActivity extends AppCompatActivity {
             return false;
         }
 
-        return validatorClass.RangeTextBox(this, hh23, 0, 99, getString(R.string.hh23), "Deaths");
+        if (!validatorClass.RangeTextBox(this, hh23, 0, 9, getString(R.string.hh23), "Deaths")) {
+            return false;
+        }
+
+        int total = Integer.valueOf(hh19.getText().toString()) + Integer.valueOf(hh20.getText().toString()) + Integer.valueOf(hh21.getText().toString()) +
+                Integer.valueOf(hh22.getText().toString()) + Integer.valueOf(hh23.getText().toString()) + Integer.valueOf(hh24.getText().toString()) +
+                Integer.valueOf(hh25.getText().toString()) + Integer.valueOf(hh26.getText().toString()) + Integer.valueOf(hh27.getText().toString());
+
+        return validatorClass.RangeTextBox(this, hh18, total, 99, getString(R.string.hh18), "Deaths");
     }
 
     @OnClick(R.id.btnNextHH)

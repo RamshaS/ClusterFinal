@@ -40,6 +40,20 @@
             android:inputType="text"
             android:maxLength="24" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/hh16" />
+
+        <EditText
+            android:id="@+id/hh16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hh16"
+            android:inputType="number"
+            android:maxLength="2" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -194,7 +208,7 @@
                 android:layout_weight="1"
                 android:hint="@string/hh14a"
                 android:inputType="number"
-                android:maxLength="2" />
+                android:maxLength="1" />
 
             <Button
                 android:id="@+id/btnNextHH"
