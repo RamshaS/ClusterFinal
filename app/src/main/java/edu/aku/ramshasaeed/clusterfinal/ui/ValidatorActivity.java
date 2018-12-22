@@ -152,11 +152,11 @@ public class ValidatorActivity extends AppCompatActivity {
 
     private boolean formValidation() {
 
-        if (!validatorClass.EmptyTextBox(this, hh16, getString(R.string.hh16))) {
+        if (!validatorClass.EmptyTextBox(this, hh18, getString(R.string.hh18))) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh18, getString(R.string.hh18))) {
+        if (!validatorClass.EmptyTextBox(this, hh16, getString(R.string.hh16))) {
             return false;
         }
 
@@ -224,7 +224,7 @@ public class ValidatorActivity extends AppCompatActivity {
                 Integer.valueOf(hh22.getText().toString()) + Integer.valueOf(hh23.getText().toString()) + Integer.valueOf(hh24.getText().toString()) +
                 Integer.valueOf(hh25.getText().toString()) + Integer.valueOf(hh26.getText().toString()) + Integer.valueOf(hh27.getText().toString());
 
-        return validatorClass.RangeTextBox(this, hh16, total, 99, getString(R.string.hh16), "Deaths");
+        return validatorClass.RangeTextBox(this, hh16, total, 99, getString(R.string.hh16), " Deaths");
     }
 
     @OnClick(R.id.btnNextHH)

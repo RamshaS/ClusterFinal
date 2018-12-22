@@ -43,14 +43,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@string/hh16" />
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text="@string/hh18" />
 
         <EditText
-            android:id="@+id/hh16"
+            android:id="@+id/hh18"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hh16"
+            android:layout_weight="1"
+            android:hint="@string/hh14a"
             android:inputType="number"
             android:maxLength="2" />
 
@@ -63,15 +64,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/hh18" />
+                android:layout_marginTop="24dp"
+                android:text="@string/hh16" />
 
             <EditText
-                android:id="@+id/hh18"
+                android:id="@+id/hh16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/hh14a"
+                android:hint="@string/hh16"
                 android:inputType="number"
                 android:maxLength="2" />
 
