@@ -183,15 +183,13 @@
             </LinearLayout>
 
             <Spinner
-                android:id="@+id/spTaluka"
+                android:id="@+id/spDistricts"
                 style="@style/Widget.AppCompat.Spinner.Underlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:layoutDirection="ltr"
-                android:popupBackground="#3d3d3d"
-                android:visibility="gone" />
+                android:layoutDirection="ltr" />
 
             <Spinner
                 android:id="@+id/spUCs"

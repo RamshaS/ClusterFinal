@@ -224,9 +224,12 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
 
                 @Override
                 public void run() {
-                    new GetAllData(mContext, "User", AppMain._HOST_URL + UsersContract.UsersTable._URI).execute();
-                    new GetAllData(mContext, "Vertices", AppMain._HOST_URL + VerticesContract.singleVertices._URI).execute();
-                    new GetAllData(mContext, "BLRandom", AppMain._HOST_URL + BLRandomContract.singleRandomHH._URI).execute(orgID);
+                    if (AppMain.district_code.equals("")) {
+                        new GetAllData(mContext, "User", AppMain._HOST_URL + UsersContract.UsersTable._URI).execute();
+                        new GetAllData(mContext, "Vertices", AppMain._HOST_URL + VerticesContract.singleVertices._URI).execute();
+                    } else {
+                        new GetAllData(mContext, "BLRandom", AppMain._HOST_URL2 + BLRandomContract.singleRandomHH._URI).execute(orgID);
+                    }
                 }
             });
 

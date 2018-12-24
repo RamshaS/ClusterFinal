@@ -37,13 +37,14 @@ public class AppMain extends Application {
     private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     public static String _HOST_URL = "http://" + AppMain._TEST_IP + "/uendashboard/sm/";
+    public static String _HOST_URL2 = "http://" + AppMain._TEST_IP + "/nns/api/";
     public static String _UPDATE_URL = "http://" + AppMain._IP + ":" + AppMain._PORT + "/nns/app/linelisting/";
     public static String DeviceURL = "devices.php";
 
     public static String TAG = "AppMain";
     public static Boolean admin = false;
     public static String IMEI;
-    public static String cluster_no;
+    public static String district_code;
     public static String hh02txt;
     public static String hh03txt;
     public static ListingFormContract lc;

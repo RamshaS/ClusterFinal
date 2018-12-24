@@ -40,6 +40,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,8 @@ import butterknife.OnClick;
 import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
+import edu.aku.ramshasaeed.clusterfinal.other.DistrictsData;
+import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
 
 import static java.lang.Thread.sleep;
 
@@ -102,6 +105,10 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
     Button mEmailSignInButton;
     @BindView(R.id.testing)
     TextView testing;
+
+    @BindView(R.id.spDistricts)
+    Spinner spDistricts;
+
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
     String DirectoryName;
@@ -169,7 +176,6 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem dbManager = menu.findItem(R.id.menu_openDB);
-
         dbManager.setVisible(false);
 
         return true;
@@ -228,7 +234,7 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
         ButterKnife.bind(this);
 //        AppMain.deviceContract = new DeviceContract();
 
-        AppMain.cluster_no = "";
+        AppMain.district_code = "";
 
         try {
             long installedOn = this
@@ -265,7 +271,6 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
             loadIMEI();
 
         }
-
 
         /*Target viewTarget = new ViewTarget(R.id.syncData, this);
 
@@ -315,6 +320,10 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
         } else {
             testing.setVisibility(View.VISIBLE);
         }
+
+//        Populating spinner
+        spDistricts.setAdapter(new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_dropdown_item, DistrictsData.getDistrictNames()));
+
     }
 
     private void requestReadContactPermission() {
@@ -690,14 +699,6 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
         }
     }
 
-    public void gotoMain(View v) {
-
-        finish();
-
-        Intent im = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(im);
-    }
-
     public void showCredits(View view) {
         if (clicks < 7) {
             clicks++;
@@ -830,6 +831,12 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
                     AppMain.userEmail = mEmail;
                     AppMain.admin = mEmail.contains("@");
 
+                    if (!validatorClass.EmptySpinner(LoginActivity.this, spDistricts, "District"))
+                        return;
+
+                    AppMain.district_code = DistrictsData.getDistrictCode(spDistricts.getSelectedItem().toString());
+
+                    finish();
                     Intent iLogin = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(iLogin);
 

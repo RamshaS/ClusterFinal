@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 
 
@@ -62,31 +63,34 @@ public class GetAllData extends AsyncTask<String, String, String> {
             switch (syncClass) {
                 case "BLRandom":
 
-                    if (args[0] != null && !args[0].equals("")) {
-                        if (Integer.valueOf(args[0]) > 0) {
-                            urlConnection.setRequestMethod("POST");
-                            urlConnection.setDoOutput(true);
-                            urlConnection.setDoInput(true);
-                            urlConnection.setRequestProperty("Content-Type", "application/json");
-                            urlConnection.setRequestProperty("charset", "utf-8");
-                            urlConnection.setUseCaches(false);
+//                    if (args[0] != null && !args[0].equals("")) {
+//                        if (Integer.valueOf(args[0]) > 0) {
+                    urlConnection.setRequestMethod("POST");
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoInput(true);
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("charset", "utf-8");
+                    urlConnection.setUseCaches(false);
 
-                            // Starts the query
-                            urlConnection.connect();
-                            JSONArray jsonSync = new JSONArray();
-                            DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
-                            JSONObject json = new JSONObject();
-                            try {
-                                json.put("id_org", args[0]);
-                            } catch (JSONException e1) {
-                                e1.printStackTrace();
-                            }
-                            Log.d(TAG, "downloadUrl: " + json.toString());
-                            wr.writeBytes(json.toString());
-                            wr.flush();
-                            wr.close();
-                        }
+                    // Starts the query
+                    urlConnection.connect();
+                    JSONArray jsonSync = new JSONArray();
+                    DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
+                    JSONObject json = new JSONObject();
+                    try {
+
+                        String argId = args[0] == null || args[0].equals("") || Integer.valueOf(args[0]) == 0 ? "1" : args[0];
+                        json.put("id_org", argId);
+                        json.put("pcode", AppMain.district_code);
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
                     }
+                    Log.d(TAG, "downloadUrl: " + json.toString());
+                    wr.writeBytes(json.toString());
+                    wr.flush();
+                    wr.close();
+//                        }
+//                    }
                     break;
             }
 

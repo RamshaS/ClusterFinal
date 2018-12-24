@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,7 @@ import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
 public class MainActivity extends MenuActivity {
     ActivityMainBinding bi;
     FormsDBHelper db;
+    private Boolean exit = false;
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -93,6 +95,28 @@ public class MainActivity extends MenuActivity {
             } else {
                 Toast.makeText(MainActivity.this, "No Coordinates Found For this cluster!!!", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finish(); // finish activity
+
+            startActivity(new Intent(this, LoginActivity.class));
+
+        } else {
+            Toast.makeText(this, "Press Back again to Exit.",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
         }
     }
 
