@@ -22,6 +22,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -216,6 +218,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        Circle circle;
+
         // Get the current location of the device and set the position of the map.
         // Add a marker in Sydney and move the camera
 
@@ -229,6 +233,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mhhMarker = createMarker(mclusterPoints.get(i), householdPoints.get(i));
             mhhMarker.showInfoWindow();
             mhhMarker.setTag(0);
+
+            circle = mMap.addCircle(new CircleOptions()
+                    .center(new LatLng(mclusterPoints.get(i).latitude, mclusterPoints.get(i).longitude))
+                    .radius(8)
+                    .strokeColor(Color.RED)
+                    .fillColor(Color.BLUE));
+            circle.setTag(0);
         }
 
 
@@ -324,23 +335,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(camPos));
     }
-    PolygonOptions addRedPolygon(ArrayList<LatLng> clusterPoints){
-    PolygonOptions rectCluster = new PolygonOptions()
-            .fillColor(getResources().getColor(R.color.colorAccentAlpha))
-            .strokeColor(Color.RED)
-            .zIndex(2.0f);
-    rectCluster.addAll(clusterPoints);
+
+    PolygonOptions addRedPolygon(ArrayList<LatLng> clusterPoints) {
+        PolygonOptions rectCluster = new PolygonOptions()
+                .fillColor(getResources().getColor(R.color.colorAccentAlpha))
+                .strokeColor(Color.RED)
+                .zIndex(2.0f);
+        rectCluster.addAll(clusterPoints);
         return rectCluster;
 
     }
-    PolygonOptions addGreenPolygon(ArrayList<LatLng> clusterPoints){
-    PolygonOptions rectSCluster = new PolygonOptions()
-            .fillColor(getResources().getColor(R.color.colorAccentGAlpha))
-            .strokeColor(Color.GREEN)
-            .zIndex(2.0f);
-    rectSCluster.addAll(clusterPoints);
-    return rectSCluster;
-}
+
+    PolygonOptions addGreenPolygon(ArrayList<LatLng> clusterPoints) {
+        PolygonOptions rectSCluster = new PolygonOptions()
+                .fillColor(getResources().getColor(R.color.colorAccentGAlpha))
+                .strokeColor(Color.GREEN)
+                .zIndex(2.0f);
+        rectSCluster.addAll(clusterPoints);
+        return rectSCluster;
+    }
+
     private class MyLocationListener implements LocationListener {
 
         Polygon polySCluster = null;

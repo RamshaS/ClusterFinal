@@ -47,7 +47,8 @@ public class FormsDBHelper extends SQLiteOpenHelper {
             singleVertices.COLUMN_POLY_SEQ + " TEXT ," +
             singleVertices.COLUMN_MARKER_HH + " TEXT ," +
             singleVertices.COLUMN_GEO_AREA + " TEXT, " +
-            singleVertices.COLUMN_PSCODE + " TEXT " +
+            singleVertices.COLUMN_PSCODE + " TEXT, " +
+            singleVertices.COLUMN_MORTALITY + " TEXT " +
             ");";
 
     final String SQL_CREATE_USERS = "CREATE TABLE " + UsersTable.TABLE_NAME + "("
@@ -483,7 +484,8 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_POLY_SEQ,
                 singleVertices.COLUMN_MARKER_HH,
                 singleVertices.COLUMN_GEO_AREA,
-                singleVertices.COLUMN_PSCODE
+                singleVertices.COLUMN_PSCODE,
+                singleVertices.COLUMN_MORTALITY
         };
 
         String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND (" + singleVertices.COLUMN_POLY_SEQ + " != '' OR " + singleVertices.COLUMN_POLY_SEQ + " != null)";
@@ -531,10 +533,13 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_POLY_SEQ,
                 singleVertices.COLUMN_MARKER_HH,
                 singleVertices.COLUMN_GEO_AREA,
-                singleVertices.COLUMN_PSCODE
+                singleVertices.COLUMN_PSCODE,
+                singleVertices.COLUMN_MORTALITY
+
         };
 
-        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND (" + singleVertices.COLUMN_POLY_SEQ + " == '' OR " + singleVertices.COLUMN_POLY_SEQ + " == null)";
+        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND (" + singleVertices.COLUMN_POLY_SEQ + " == '' OR " + singleVertices.COLUMN_POLY_SEQ + " == null)" +
+                " AND (" + singleVertices.COLUMN_MORTALITY + " == '' OR " + singleVertices.COLUMN_MORTALITY + " == null) ";
         String[] whereArgs = {cluster_code};
         String groupBy = null;
         String having = null;
@@ -590,6 +595,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 values.put(singleVertices.COLUMN_MARKER_HH, vc.getmarker_hh());
                 values.put(singleVertices.COLUMN_GEO_AREA, vc.getgeoarea());
                 values.put(singleVertices.COLUMN_PSCODE, vc.getpcode());
+                values.put(singleVertices.COLUMN_MORTALITY, vc.getMortality());
 
                 db.insert(singleVertices.TABLE_NAME, null, values);
             }

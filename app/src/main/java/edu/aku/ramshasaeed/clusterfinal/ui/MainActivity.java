@@ -54,18 +54,32 @@ public class MainActivity extends MenuActivity {
 
         AppMain.hh02txt = bi.txtPSU.getText().toString();
 
-        BLRandomContract getBLData;
-        if (AppMain.PSUExist(bi.txtPSU.getText().toString())) {
-            getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString(), AppMain.hh03txt);
+        Boolean loginFlag = false;
+        int clus = Integer.valueOf(bi.txtPSU.getText().toString());
+        if (clus < 6000) {
+            loginFlag = !(AppMain.userEmail.equals("test1234") || AppMain.userEmail.equals("dmu@aku") || AppMain.userEmail.substring(0, 4).equals("user"));
         } else {
-            getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString());
+            loginFlag = AppMain.userEmail.equals("test1234") || AppMain.userEmail.equals("dmu@aku") || AppMain.userEmail.substring(0, 4).equals("user");
         }
+        if (loginFlag) {
 
-        if (getBLData != null) {
-            startActivity(new Intent(this, ValidatorActivity.class)
-                    .putExtra("blData", getBLData));
+            BLRandomContract getBLData;
+            if (AppMain.PSUExist(bi.txtPSU.getText().toString())) {
+                getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString(), AppMain.hh03txt);
+            } else {
+                getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString());
+            }
+
+            if (getBLData != null) {
+                startActivity(new Intent(this, ValidatorActivity.class)
+                        .putExtra("blData", getBLData));
+            } else {
+                Toast.makeText(this, "Cluster don't exist!!", Toast.LENGTH_SHORT).show();
+            }
+
+
         } else {
-            Toast.makeText(this, "Cluster don't exist!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Can't proceed test cluster for current user!!", Toast.LENGTH_SHORT).show();
         }
 
     }

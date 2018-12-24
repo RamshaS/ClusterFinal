@@ -62,6 +62,7 @@ public class GetAllData extends AsyncTask<String, String, String> {
 
             switch (syncClass) {
                 case "BLRandom":
+                case "Vertices":
 
 //                    if (args[0] != null && !args[0].equals("")) {
 //                        if (Integer.valueOf(args[0]) > 0) {
@@ -79,8 +80,10 @@ public class GetAllData extends AsyncTask<String, String, String> {
                     JSONObject json = new JSONObject();
                     try {
 
-                        String argId = args[0] == null || args[0].equals("") || Integer.valueOf(args[0]) == 0 ? "1" : args[0];
-                        json.put("id_org", argId);
+                        if (syncClass.equals("BLRandom")) {
+                            String argId = args[0] == null || args[0].equals("") || Integer.valueOf(args[0]) == 0 ? "1" : args[0];
+                            json.put("id_org", argId);
+                        }
                         json.put("pcode", AppMain.district_code);
                     } catch (JSONException e1) {
                         e1.printStackTrace();

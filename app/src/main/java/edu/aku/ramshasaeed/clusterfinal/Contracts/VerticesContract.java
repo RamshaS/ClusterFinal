@@ -19,6 +19,7 @@ public class VerticesContract {
     private String marker_hh;
     private String geoarea;
     private String pcode;
+    private String mortality;
 
 
     public VerticesContract() {
@@ -32,6 +33,7 @@ public class VerticesContract {
         this.marker_hh = jsonObject.getString(singleVertices.COLUMN_MARKER_HH);
         this.geoarea = jsonObject.getString(singleVertices.COLUMN_GEO_AREA);
         this.pcode = jsonObject.getString(singleVertices.COLUMN_PSCODE);
+        this.mortality = jsonObject.getString(singleVertices.COLUMN_MORTALITY);
 
 
         return this;
@@ -45,6 +47,7 @@ public class VerticesContract {
         this.marker_hh =cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_MARKER_HH));
         this.geoarea = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_GEO_AREA));
         this.pcode = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_PSCODE));
+        this.mortality = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_MORTALITY));
         return this;
     }
 
@@ -104,6 +107,14 @@ public class VerticesContract {
         this.pcode = pcode;
     }
 
+    public String getMortality() {
+        return mortality;
+    }
+
+    public void setMortality(String mortality) {
+        this.mortality = mortality;
+    }
+
     public static abstract class singleVertices implements BaseColumns {
 
         public static final String TABLE_NAME = "Vertices";
@@ -116,6 +127,7 @@ public class VerticesContract {
         public static final String COLUMN_MARKER_HH = "marker_hh";
         public static final String COLUMN_GEO_AREA = "geoarea";
         public static final String COLUMN_PSCODE = "pcode";
+        public static final String COLUMN_MORTALITY = "mortality";
 
         public static final String _URI = "vertices.php";
     }
