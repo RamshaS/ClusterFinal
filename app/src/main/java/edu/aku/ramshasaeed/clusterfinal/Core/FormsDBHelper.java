@@ -46,7 +46,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
             singleVertices.COLUMN_POLY_LANG + " TEXT, " +
             singleVertices.COLUMN_POLY_SEQ + " TEXT ," +
             singleVertices.COLUMN_MARKER_HH + " TEXT ," +
-            singleVertices.COLUMN_GEO_AREA + " TEXT, " +
+//            singleVertices.COLUMN_GEO_AREA + " TEXT, " +
             singleVertices.COLUMN_PSCODE + " TEXT, " +
             singleVertices.COLUMN_MORTALITY + " TEXT " +
             ");";
@@ -483,7 +483,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_POLY_LANG,
                 singleVertices.COLUMN_POLY_SEQ,
                 singleVertices.COLUMN_MARKER_HH,
-                singleVertices.COLUMN_GEO_AREA,
+//                singleVertices.COLUMN_GEO_AREA,
                 singleVertices.COLUMN_PSCODE,
                 singleVertices.COLUMN_MORTALITY
         };
@@ -532,7 +532,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_POLY_LANG,
                 singleVertices.COLUMN_POLY_SEQ,
                 singleVertices.COLUMN_MARKER_HH,
-                singleVertices.COLUMN_GEO_AREA,
+//                singleVertices.COLUMN_GEO_AREA,
                 singleVertices.COLUMN_PSCODE,
                 singleVertices.COLUMN_MORTALITY
 
@@ -544,8 +544,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         String groupBy = null;
         String having = null;
 
-        String orderBy =
-                singleVertices.COLUMN_POLY_SEQ + " ASC";
+        String orderBy = singleVertices.COLUMN_POLY_LAT + " ASC";
 
         Collection<VerticesContract> allVC = new ArrayList<>();
         try {
@@ -593,7 +592,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 values.put(singleVertices.COLUMN_POLY_LANG, vc.getPoly_lng());
                 values.put(singleVertices.COLUMN_POLY_SEQ, vc.getPoly_seq());
                 values.put(singleVertices.COLUMN_MARKER_HH, vc.getmarker_hh());
-                values.put(singleVertices.COLUMN_GEO_AREA, vc.getgeoarea());
+//                values.put(singleVertices.COLUMN_GEO_AREA, vc.getgeoarea());
                 values.put(singleVertices.COLUMN_PSCODE, vc.getpcode());
                 values.put(singleVertices.COLUMN_MORTALITY, vc.getMortality());
 

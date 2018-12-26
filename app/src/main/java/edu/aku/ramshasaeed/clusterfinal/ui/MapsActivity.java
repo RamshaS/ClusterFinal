@@ -236,10 +236,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             circle = mMap.addCircle(new CircleOptions()
                     .center(new LatLng(mclusterPoints.get(i).latitude, mclusterPoints.get(i).longitude))
-                    .radius(8)
+                    .radius(7)
                     .strokeColor(Color.RED)
                     .fillColor(Color.BLUE));
-            circle.setTag(0);
+            circle.setTag(1);
         }
 
 

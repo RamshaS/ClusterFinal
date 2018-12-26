@@ -123,7 +123,7 @@ public abstract class validatorClass {
 
     public static boolean EmptySpinner(Context context, Spinner spin, String msg) {
         if ((spin.getSelectedItem() == "....") || (spin.getSelectedItem() == "select")) {
-            ((TextView) spin.getSelectedView()).setText("This Data is Required");
+            ((TextView) spin.getSelectedView()).setText("The " + msg + " is Required");
             ((TextView) spin.getSelectedView()).setTextColor(Color.RED);
             spin.setFocusableInTouchMode(true);
             spin.requestFocus();
