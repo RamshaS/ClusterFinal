@@ -192,6 +192,8 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         values.put(ListingFormEntry.COLUMN_SNO, lc.getSno());
         values.put(ListingFormEntry.COLUMN_NAME_HH02, lc.getHh02());
         values.put(ListingFormEntry.COLUMN_NAME_HH03, lc.getHh03());
+        values.put(ListingFormEntry.COLUMN_NAME_HH07, lc.getHh07());
+        values.put(ListingFormEntry.COLUMN_NAME_HH08, lc.getHh08());
 
         AppMain.updatePSU(lc.getHh02(), hh);
         Log.d(TAG, "PSUExist (Test): " + AppMain.sharedPref.getString(lc.getHh02(), "0"));
