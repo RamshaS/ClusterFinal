@@ -243,11 +243,14 @@ public class ListingFormContract {
         ListingFormContract lc = new ListingFormContract(c.getString(c.getColumnIndex(ListingFormEntry._ID)));
         lc.setHhDT(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HHDATETIME))));
         lc.setLuid(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_LUID))));
+        lc.setUID(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_UID))));
         lc.setClusterCode(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_CLUSTERCODE))));
         lc.setRandDT(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_RANDDT))));
         lc.setSno(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_SNO))));
         lc.setHh02(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH02))));
         lc.setHh03(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH03))));
+        lc.setHh03(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH07))));
+        lc.setHh03(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH08))));
         lc.setDeviceID(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_DEVICEID))));
         lc.setGPSLat(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_GPSLat))));
         lc.setGPSLng(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_GPSLng))));

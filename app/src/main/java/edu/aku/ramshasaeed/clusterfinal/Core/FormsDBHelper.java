@@ -246,8 +246,8 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 ListingFormEntry.COLUMN_RANDOMIZED
         };
 
-        String whereClause = ListingFormEntry.COLUMN_SYNCED + " is null OR " + ListingFormEntry.COLUMN_SYNCED + " =?";
-        String[] whereArgs = new String[]{"1"};
+        String whereClause = ListingFormEntry.COLUMN_SYNCED + " is null OR " + ListingFormEntry.COLUMN_SYNCED + " = ''";
+        String[] whereArgs = null;
 
 
         String groupBy = null;
