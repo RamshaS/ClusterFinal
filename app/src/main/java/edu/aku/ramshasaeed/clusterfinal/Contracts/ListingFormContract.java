@@ -249,8 +249,8 @@ public class ListingFormContract {
         lc.setSno(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_SNO))));
         lc.setHh02(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH02))));
         lc.setHh03(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH03))));
-        lc.setHh03(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH07))));
-        lc.setHh03(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH08))));
+        lc.setHh07(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH07))));
+        lc.setHh08(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_HH08))));
         lc.setDeviceID(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_DEVICEID))));
         lc.setGPSLat(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_GPSLat))));
         lc.setGPSLng(String.valueOf(c.getString(c.getColumnIndex(ListingFormEntry.COLUMN_NAME_GPSLng))));
