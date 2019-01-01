@@ -224,7 +224,7 @@ public class ValidatorActivity extends AppCompatActivity {
                 Integer.valueOf(hh22.getText().toString()) + Integer.valueOf(hh23.getText().toString()) + Integer.valueOf(hh24.getText().toString()) +
                 Integer.valueOf(hh25.getText().toString()) + Integer.valueOf(hh26.getText().toString()) + Integer.valueOf(hh27.getText().toString());
 
-        return validatorClass.RangeTextBox(this, hh16, total, 99, getString(R.string.hh16), " Deaths");
+        return validatorClass.RangeTextBox(this, hh16, total, 9, getString(R.string.hh16), " Deaths");
     }
 
     @OnClick(R.id.btnNextHH)
