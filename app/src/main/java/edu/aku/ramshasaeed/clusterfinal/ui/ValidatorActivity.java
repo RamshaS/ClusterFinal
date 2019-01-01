@@ -104,7 +104,7 @@ public class ValidatorActivity extends AppCompatActivity {
         AppMain.lc.setSno(blData.getSno());
 
         JSONObject sA = new JSONObject();
-        sA.put("hh16", hh16.getText().toString());
+        sA.put("hh28", hh16.getText().toString());
         sA.put("hh18", hh18.getText().toString());
         sA.put("hh19", hh19.getText().toString());
         sA.put("hh20", hh20.getText().toString());
