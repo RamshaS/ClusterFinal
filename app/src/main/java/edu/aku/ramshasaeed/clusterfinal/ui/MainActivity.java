@@ -64,17 +64,24 @@ public class MainActivity extends MenuActivity {
         if (loginFlag) {
 
             BLRandomContract getBLData;
+            String message;
+
             if (AppMain.PSUExist(bi.txtPSU.getText().toString())) {
                 getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString(), AppMain.hh03txt);
+
+                message = "No more household found!!";
+
             } else {
                 getBLData = db.lastBLRandomRecord(bi.txtPSU.getText().toString());
+
+                message = "Cluster don't exist!!";
             }
 
             if (getBLData != null) {
                 startActivity(new Intent(this, ValidatorActivity.class)
                         .putExtra("blData", getBLData));
             } else {
-                Toast.makeText(this, "Cluster don't exist!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
 
 

@@ -240,9 +240,14 @@ public class ValidatorActivity extends AppCompatActivity {
                 finish();
 
                 BLRandomContract getBLData = db.lastBLRandomRecord(blData.getClusterCode(), blData.getHh());
-                Intent fA = new Intent(this, ValidatorActivity.class)
-                        .putExtra("blData", getBLData);
-                startActivity(fA);
+                if (getBLData != null) {
+                    startActivity(new Intent(this, ValidatorActivity.class)
+                            .putExtra("blData", getBLData));
+                } else {
+                    Toast.makeText(this, "No more household found!!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, MainActivity.class));
+                }
+
             }
 
         }

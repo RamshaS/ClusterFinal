@@ -380,9 +380,10 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         if (hh.length > 0) {
             qry = "SELECT * FROM " + singleRandomHH.TABLE_NAME + " WHERE " + singleRandomHH.COLUMN_COL_ID
                     + " IN (SELECT " + singleRandomHH.COLUMN_COL_ID + "+1 FROM " + singleRandomHH.TABLE_NAME + " WHERE " +
-                    singleRandomHH.COLUMN_CLUSTER_CODE + " =? AND " + singleRandomHH.COLUMN_HH + " =?)";
+                    singleRandomHH.COLUMN_CLUSTER_CODE + " =? AND " + singleRandomHH.COLUMN_HH + " =?) AND " +
+                    singleRandomHH.COLUMN_CLUSTER_CODE + " =?";
 
-            where = new String[]{cluster, hh[0]};
+            where = new String[]{cluster, hh[0], cluster};
 
         } else {
             qry = "SELECT * FROM " + singleRandomHH.TABLE_NAME + " WHERE " + singleRandomHH.COLUMN_CLUSTER_CODE + " =? ORDER BY " + singleRandomHH.COLUMN_COL_ID + " ASC";
