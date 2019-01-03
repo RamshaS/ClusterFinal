@@ -1,4 +1,4 @@
-package edu.aku.ramshasaeed.clusterfinal.validation.validation;
+package edu.aku.ramshasaeed.clusterfinal.validation;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -26,7 +26,7 @@ import edu.aku.ramshasaeed.clusterfinal.R;
  * Created by ali.azaz on 12/04/17.
  */
 
-public abstract class validatorClass {
+public abstract class ValidatorClass {
 
     public static boolean EmptyTextBox(Context context, EditText txt, String msg) {
         if (TextUtils.isEmpty(txt.getText().toString())) {

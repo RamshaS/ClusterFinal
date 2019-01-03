@@ -8,7 +8,11 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +30,8 @@ import edu.aku.ramshasaeed.clusterfinal.Contracts.ListingFormContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
-import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
+import edu.aku.ramshasaeed.clusterfinal.validation.ClearClass;
+import edu.aku.ramshasaeed.clusterfinal.validation.ValidatorClass;
 
 public class ValidatorActivity extends AppCompatActivity {
 
@@ -36,6 +41,18 @@ public class ValidatorActivity extends AppCompatActivity {
     TextView txtTeamNoWithFam;
     @BindView(R.id.hh08)
     EditText hh08;
+
+    @BindView(R.id.fldGrpa01)
+    LinearLayout fldGrpa01;
+
+    @BindView(R.id.hh29)
+    RadioGroup hh29;
+    @BindView(R.id.hh29a)
+    RadioButton hh29a;
+    @BindView(R.id.hh29b)
+    RadioButton hh29b;
+    @BindView(R.id.hh29c)
+    RadioButton hh029c;
 
     @BindView(R.id.hh16)
     EditText hh16;
@@ -70,17 +87,33 @@ public class ValidatorActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setContentUI();
+        setListener();
 
     }
 
     public void setContentUI() {
-        this.setTitle("FAMILY LISTING");
 //        txtTeamNoWithFam.setText("NNS-S" + String.format("%04d", AppMain.hh03txt) + "-H" + String.format("%03d", Integer.valueOf(AppMain.hh07txt)));
 
         blData = (BLRandomContract) getIntent().getSerializableExtra("blData");
         txtTeamNoWithFam.setText("NNS-S" + blData.getHh());
         hh08.setText(blData.getHhhead());
 
+        this.setTitle("FAMILY LISTING -- CLUSTER : " + blData.getClusterCode());
+
+    }
+
+    public void setListener() {
+        hh29.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (i == hh29a.getId()) {
+                    fldGrpa01.setVisibility(View.VISIBLE);
+                } else {
+                    fldGrpa01.setVisibility(View.GONE);
+                    ClearClass.ClearAllFields(fldGrpa01);
+                }
+            }
+        });
     }
 
     private void SaveDraft() throws JSONException {
@@ -104,7 +137,6 @@ public class ValidatorActivity extends AppCompatActivity {
         AppMain.lc.setSno(blData.getSno());
 
         JSONObject sA = new JSONObject();
-        sA.put("hh28", hh16.getText().toString());
         sA.put("hh18", hh18.getText().toString());
         sA.put("hh19", hh19.getText().toString());
         sA.put("hh20", hh20.getText().toString());
@@ -115,6 +147,8 @@ public class ValidatorActivity extends AppCompatActivity {
         sA.put("hh25", hh25.getText().toString());
         sA.put("hh26", hh26.getText().toString());
         sA.put("hh27", hh27.getText().toString());
+        sA.put("hh28", hh16.getText().toString());
+        sA.put("hh29", hh29a.isChecked() ? "1" : hh29b.isChecked() ? "2" : hh029c.isChecked() ? "3" : "0");
 
         AppMain.lc.setSA(String.valueOf(sA));
 
@@ -152,71 +186,78 @@ public class ValidatorActivity extends AppCompatActivity {
 
     private boolean formValidation() {
 
-        if (!validatorClass.EmptyTextBox(this, hh18, getString(R.string.hh18))) {
+        if (!ValidatorClass.EmptyRadioButton(this, hh29, hh29a, getString(R.string.hh08a1))) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh16, getString(R.string.hh16))) {
+        if (!hh29a.isChecked())
+            return true;
+
+        if (!ValidatorClass.EmptyTextBox(this, hh18, getString(R.string.hh18))) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh19, getString(R.string.hh19))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh16, getString(R.string.hh16))) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh20, getString(R.string.hh20))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh19, getString(R.string.hh19))) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh21, getString(R.string.hh21))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh20, getString(R.string.hh20))) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh27, getString(R.string.hh27))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh21, getString(R.string.hh21))) {
             return false;
         }
 
-        /*if (!validatorClass.RangeTextBox(this, hh21, 0, 99, getString(R.string.hh21), "Deaths")) {
+        if (!ValidatorClass.EmptyTextBox(this, hh27, getString(R.string.hh27))) {
+            return false;
+        }
+
+        /*if (!ValidatorClass.RangeTextBox(this, hh21, 0, 99, getString(R.string.hh21), "Deaths")) {
             return false;
         }*/
 
-        if (!validatorClass.EmptyTextBox(this, hh22, getString(R.string.hh22))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh22, getString(R.string.hh22))) {
             return false;
         }
 
-       /* if (!validatorClass.RangeTextBox(this, hh22, 0, 99, getString(R.string.hh22), "Deaths")) {
+       /* if (!ValidatorClass.RangeTextBox(this, hh22, 0, 99, getString(R.string.hh22), "Deaths")) {
             return false;
         }*/
 
-        if (!validatorClass.EmptyTextBox(this, hh24, getString(R.string.hh24))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh24, getString(R.string.hh24))) {
             return false;
         }
 
-        if (!validatorClass.RangeTextBox(this, hh24, 0, 9, getString(R.string.hh24), "Deaths")) {
+        if (!ValidatorClass.RangeTextBox(this, hh24, 0, 9, getString(R.string.hh24), "Deaths")) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh25, getString(R.string.hh25))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh25, getString(R.string.hh25))) {
             return false;
         }
 
-        if (!validatorClass.RangeTextBox(this, hh25, 0, 9, getString(R.string.hh25), "Deaths")) {
+        if (!ValidatorClass.RangeTextBox(this, hh25, 0, 9, getString(R.string.hh25), "Deaths")) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh26, getString(R.string.hh26))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh26, getString(R.string.hh26))) {
             return false;
         }
 
-        if (!validatorClass.RangeTextBox(this, hh26, 0, 9, getString(R.string.hh26), "Deaths")) {
+        if (!ValidatorClass.RangeTextBox(this, hh26, 0, 9, getString(R.string.hh26), "Deaths")) {
             return false;
         }
 
-        if (!validatorClass.EmptyTextBox(this, hh23, getString(R.string.hh23))) {
+        if (!ValidatorClass.EmptyTextBox(this, hh23, getString(R.string.hh23))) {
             return false;
         }
 
-        if (!validatorClass.RangeTextBox(this, hh23, 0, 9, getString(R.string.hh23), "Deaths")) {
+        if (!ValidatorClass.RangeTextBox(this, hh23, 0, 9, getString(R.string.hh23), "Deaths")) {
             return false;
         }
 
@@ -224,7 +265,7 @@ public class ValidatorActivity extends AppCompatActivity {
                 Integer.valueOf(hh22.getText().toString()) + Integer.valueOf(hh23.getText().toString()) + Integer.valueOf(hh24.getText().toString()) +
                 Integer.valueOf(hh25.getText().toString()) + Integer.valueOf(hh26.getText().toString()) + Integer.valueOf(hh27.getText().toString());
 
-        return validatorClass.RangeTextBox(this, hh16, total, 9, getString(R.string.hh16), " Deaths");
+        return ValidatorClass.RangeTextBox(this, hh16, total, 9, getString(R.string.hh16), " Deaths");
     }
 
     @OnClick(R.id.btnNextHH)

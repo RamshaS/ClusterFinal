@@ -20,7 +20,7 @@ import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
 import edu.aku.ramshasaeed.clusterfinal.databinding.ActivityMainBinding;
-import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
+import edu.aku.ramshasaeed.clusterfinal.validation.ValidatorClass;
 
 public class MainActivity extends MenuActivity {
     ActivityMainBinding bi;
@@ -49,7 +49,7 @@ public class MainActivity extends MenuActivity {
     }
 
     public void openForm() {
-        if (!validatorClass.EmptyTextBox(this, bi.txtPSU, "Enter Cluster"))
+        if (!ValidatorClass.EmptyTextBox(this, bi.txtPSU, "Enter Cluster"))
             return;
 
         AppMain.hh02txt = bi.txtPSU.getText().toString();
@@ -93,7 +93,7 @@ public class MainActivity extends MenuActivity {
 
     public void openMap() {
 
-        if (!validatorClass.EmptyTextBox(this, bi.txtPSU, "Enter Cluster"))
+        if (!ValidatorClass.EmptyTextBox(this, bi.txtPSU, "Enter Cluster"))
             return;
 
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

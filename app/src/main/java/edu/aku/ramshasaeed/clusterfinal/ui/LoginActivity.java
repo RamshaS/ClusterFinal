@@ -57,7 +57,7 @@ import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
 import edu.aku.ramshasaeed.clusterfinal.other.DistrictsData;
-import edu.aku.ramshasaeed.clusterfinal.validation.validation.validatorClass;
+import edu.aku.ramshasaeed.clusterfinal.validation.ValidatorClass;
 
 import static java.lang.Thread.sleep;
 
@@ -831,7 +831,7 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
                     AppMain.userEmail = mEmail;
                     AppMain.admin = mEmail.contains("@");
 
-                    if (!validatorClass.EmptySpinner(LoginActivity.this, spDistricts, "District"))
+                    if (!ValidatorClass.EmptySpinner(LoginActivity.this, spDistricts, "District"))
                         return;
 
                     AppMain.district_code = DistrictsData.getDistrictCode(spDistricts.getSelectedItem().toString());

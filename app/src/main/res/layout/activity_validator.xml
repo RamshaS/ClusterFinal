@@ -28,6 +28,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:text="@string/hh08a1" />
+
+        <RadioGroup
+            android:id="@+id/hh29"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/hh29a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/hh29b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/rfsd" />
+
+            <RadioButton
+                android:id="@+id/hh29c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/locked" />
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/hh08" />
 
         <EditText
@@ -40,26 +74,29 @@
             android:inputType="text"
             android:maxLength="24" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:text="@string/hh18" />
-
-        <EditText
-            android:id="@+id/hh18"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="@string/hh14a"
-            android:inputType="number"
-            android:maxLength="1" />
-
         <LinearLayout
+            android:id="@+id/fldGrpa01"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/_5sdp">
+            android:padding="@dimen/_5sdp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/hh18" />
+
+            <EditText
+                android:id="@+id/hh18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/hh14a"
+                android:inputType="number"
+                android:maxLength="1" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -201,23 +238,25 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/hh23" />
 
-            <EditText
-                android:id="@+id/hh23"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/hh14a"
-                android:inputType="number"
-                android:maxLength="1" />
-
-            <Button
-                android:id="@+id/btnNextHH"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="NEXT STRUCTURE" />
 
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/hh23"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/hh14a"
+            android:inputType="number"
+            android:maxLength="1" />
+
+        <Button
+            android:id="@+id/btnNextHH"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="NEXT STRUCTURE" />
+
 
     </LinearLayout>
 </ScrollView>
