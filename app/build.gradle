@@ -6,13 +6,28 @@ android {
         enabled = true
     }
 
-    defaultConfig {
-        applicationId "edu.aku.ramshasaeed.clusterfinal"
-        minSdkVersion 17
-        targetSdkVersion 28
-        versionCode 1
-        versionName "0.1"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+        versionProps['VERSION_CODE'] = code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        defaultConfig {
+            applicationId "edu.aku.ramshasaeed.clusterfinal"
+            minSdkVersion 17
+            targetSdkVersion 28
+            versionCode code
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+    } else {
+        throw new GradleException("Could not read version.properties!")
     }
     buildTypes {
         release {
