@@ -20,8 +20,8 @@ android {
 
         defaultConfig {
             applicationId "edu.aku.ramshasaeed.clusterfinal"
-            minSdkVersion 17
-            targetSdkVersion 28
+            minSdkVersion 19
+            targetSdkVersion 19
             versionCode code
             versionName "1.0"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
