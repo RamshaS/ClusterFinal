@@ -152,7 +152,7 @@ public class ValidatorActivity extends AppCompatActivity {
         if (flag)
             sA.put("hh29", hh29a.isChecked() ? "1" : hh29b.isChecked() ? "2" : hh029c.isChecked() ? "3" : "0");
         else
-            sA.put("hh29", "8");
+            sA.put("hh29", "9");
 
         AppMain.lc.setSA(String.valueOf(sA));
 
