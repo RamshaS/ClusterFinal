@@ -23,6 +23,17 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/agakhan" />
 
+        <TextView
+            android:id="@+id/districtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="DISTRICT"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

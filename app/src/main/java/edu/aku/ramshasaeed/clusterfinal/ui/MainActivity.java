@@ -43,8 +43,9 @@ public class MainActivity extends MenuActivity {
         super.onCreate(savedInstanceState);
         bi = DataBindingUtil.setContentView(this, R.layout.activity_main);
         bi.setCallback(this);
-
         db = new FormsDBHelper(this);
+
+        bi.districtName.setText(AppMain.district_name + " : " + AppMain.district_code);
 
     }
 

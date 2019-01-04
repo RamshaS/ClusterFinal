@@ -45,6 +45,7 @@ public class AppMain extends Application {
     public static Boolean admin = false;
     public static String IMEI;
     public static String district_code;
+    public static String district_name;
     public static String hh02txt;
     public static String hh03txt;
     public static ListingFormContract lc;

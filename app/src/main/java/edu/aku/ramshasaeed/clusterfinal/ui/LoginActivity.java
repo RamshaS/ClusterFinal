@@ -835,6 +835,7 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
                         return;
 
                     AppMain.district_code = DistrictsData.getDistrictCode(spDistricts.getSelectedItem().toString());
+                    AppMain.district_name = spDistricts.getSelectedItem().toString();
 
                     finish();
                     Intent iLogin = new Intent(LoginActivity.this, MainActivity.class);
