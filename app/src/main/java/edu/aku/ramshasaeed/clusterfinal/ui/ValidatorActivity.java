@@ -116,7 +116,7 @@ public class ValidatorActivity extends AppCompatActivity {
         });
     }
 
-    private void SaveDraft() throws JSONException {
+    private void SaveDraft(boolean flag) throws JSONException {
 
         AppMain.lc = new ListingFormContract();
         AppMain.lc.setTagId(AppMain.getTagName(this));
@@ -148,7 +148,11 @@ public class ValidatorActivity extends AppCompatActivity {
         sA.put("hh26", hh26.getText().toString());
         sA.put("hh27", hh27.getText().toString());
         sA.put("hh28", hh16.getText().toString());
-        sA.put("hh29", hh29a.isChecked() ? "1" : hh29b.isChecked() ? "2" : hh029c.isChecked() ? "3" : "0");
+
+        if (flag)
+            sA.put("hh29", hh29a.isChecked() ? "1" : hh29b.isChecked() ? "2" : hh029c.isChecked() ? "3" : "0");
+        else
+            sA.put("hh29", "8");
 
         AppMain.lc.setSA(String.valueOf(sA));
 
@@ -265,7 +269,20 @@ public class ValidatorActivity extends AppCompatActivity {
                 Integer.valueOf(hh22.getText().toString()) + Integer.valueOf(hh23.getText().toString()) + Integer.valueOf(hh24.getText().toString()) +
                 Integer.valueOf(hh25.getText().toString()) + Integer.valueOf(hh26.getText().toString()) + Integer.valueOf(hh27.getText().toString());
 
-        return ValidatorClass.RangeTextBox(this, hh16, total, 9, getString(R.string.hh16), " Deaths");
+//        return ValidatorClass.RangeTextBox(this, hh16, total, 9, getString(R.string.hh16), " Deaths");
+
+        if (Integer.valueOf(hh16.getText().toString()) < total || Integer.valueOf(hh16.getText().toString()) > 9) {
+            Toast.makeText(this, "ERROR(invalid): " + getString(R.string.hh16), Toast.LENGTH_SHORT).show();
+            hh16.setError("Total death do not match death count below");    // Set Error on last radio button
+            hh16.setFocusableInTouchMode(true);
+            hh16.requestFocus();
+            return false;
+        } else {
+            hh16.setError(null);
+            hh16.clearFocus();
+            return true;
+        }
+
     }
 
     @OnClick(R.id.btnNextHH)
@@ -273,11 +290,11 @@ public class ValidatorActivity extends AppCompatActivity {
         if (formValidation()) {
 
             try {
-                SaveDraft();
+                SaveDraft(true);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if (UpdateDB()) {
+            if (UpdateDB(true)) {
                 finish();
 
                 BLRandomContract getBLData = db.lastBLRandomRecord(blData.getClusterCode(), blData.getHh());
@@ -295,10 +312,27 @@ public class ValidatorActivity extends AppCompatActivity {
 
     }
 
-    private boolean UpdateDB() {
+    @OnClick(R.id.btnExit)
+    void onBtnExitClick() {
+        //TODO implement
+
+        try {
+            SaveDraft(false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (UpdateDB(false)) {
+            finish();
+
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
+    }
+
+    private boolean UpdateDB(boolean flag) {
         db = new FormsDBHelper(this);
 
-        long updcount = db.addForm(AppMain.lc, blData.getHh());
+        long updcount = db.addForm(AppMain.lc, blData.getHh(), flag);
 
         AppMain.lc.setID(String.valueOf(updcount));
 

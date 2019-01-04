@@ -175,7 +175,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Long addForm(ListingFormContract lc, String hh) {
+    public Long addForm(ListingFormContract lc, String hh, boolean flag) {
 
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
@@ -195,8 +195,10 @@ public class FormsDBHelper extends SQLiteOpenHelper {
         values.put(ListingFormEntry.COLUMN_NAME_HH07, lc.getHh07());
         values.put(ListingFormEntry.COLUMN_NAME_HH08, lc.getHh08());
 
-        AppMain.updatePSU(lc.getHh02(), hh);
-        Log.d(TAG, "PSUExist (Test): " + AppMain.sharedPref.getString(lc.getHh02(), "0"));
+        if (flag) {
+            AppMain.updatePSU(lc.getHh02(), hh);
+            Log.d(TAG, "PSUExist (Test): " + AppMain.sharedPref.getString(lc.getHh02(), "0"));
+        }
 
         values.put(ListingFormEntry.COLUMN_SA, lc.getsA());
         values.put(ListingFormEntry.COLUMN_NAME_DEVICEID, lc.getDeviceID());

@@ -248,12 +248,32 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnNextHH"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="NEXT STRUCTURE" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnExit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:background="@color/red"
+                android:text="EXIT STRUCTURE"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnNextHH"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="50"
+                android:background="@color/colorPrimary"
+                android:text="NEXT STRUCTURE"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
