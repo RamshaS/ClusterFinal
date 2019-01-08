@@ -45,6 +45,7 @@ public class MainActivity extends MenuActivity {
         bi.setCallback(this);
         db = new FormsDBHelper(this);
 
+        bi.province.setText(AppMain.pro);
         bi.districtName.setText(AppMain.district_name + " : " + AppMain.district_code);
 
     }

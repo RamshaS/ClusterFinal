@@ -24,6 +24,17 @@
             android:src="@drawable/agakhan" />
 
         <TextView
+            android:id="@+id/province"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:text="PROVINCE"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/districtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

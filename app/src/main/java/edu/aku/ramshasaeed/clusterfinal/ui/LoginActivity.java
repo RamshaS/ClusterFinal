@@ -35,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,10 +54,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract;
 import edu.aku.ramshasaeed.clusterfinal.Core.AppMain;
 import edu.aku.ramshasaeed.clusterfinal.Core.FormsDBHelper;
 import edu.aku.ramshasaeed.clusterfinal.R;
-import edu.aku.ramshasaeed.clusterfinal.other.DistrictsData;
+import edu.aku.ramshasaeed.clusterfinal.other.Dist_Prov_Data;
 import edu.aku.ramshasaeed.clusterfinal.validation.ValidatorClass;
 
 import static java.lang.Thread.sleep;
@@ -106,6 +108,8 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
     @BindView(R.id.testing)
     TextView testing;
 
+    @BindView(R.id.spProvince)
+    Spinner spProvince;
     @BindView(R.id.spDistricts)
     Spinner spDistricts;
 
@@ -116,6 +120,7 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
     String dtToday = new SimpleDateFormat("dd-MM-yy HH:mm").format(new Date().getTime());
     private UserLoginTask mAuthTask = null;
     private int clicks;
+    private ArrayList<DistrictContract> districts;
 
     public static boolean checkAndRequestPermissions(Context context, Activity activity) {
         int permissionContact = ContextCompat.checkSelfPermission(context,
@@ -296,13 +301,6 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                /*if (spUCs.getSelectedItemPosition() != 0 && spTalukas.getSelectedItemPosition() != 0) {
-                    attemptLogin();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please Sync Data or select from combobox!!", Toast.LENGTH_LONG).show();
-                }*/
-
                 attemptLogin();
 
             }
@@ -322,7 +320,29 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
         }
 
 //        Populating spinner
-        spDistricts.setAdapter(new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_dropdown_item, DistrictsData.getDistrictNames()));
+        spProvince.setAdapter(new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_dropdown_item, Dist_Prov_Data.getProvinceNames()));
+        spProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                ArrayList<String> districtsName = new ArrayList<>();
+                districtsName.add("....");
+
+                if (i > 0) {
+                    districts = db.getAllDistricts(Dist_Prov_Data.getProvinceCode(spProvince.getSelectedItem().toString()));
+                    for (DistrictContract districtDT : districts) {
+                        districtsName.add(districtDT.getDistrict_name());
+                    }
+                }
+
+                spDistricts.setAdapter(new ArrayAdapter<>(LoginActivity.this, android.R.layout.simple_spinner_dropdown_item, districtsName));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
 
@@ -831,10 +851,14 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
                     AppMain.userEmail = mEmail;
                     AppMain.admin = mEmail.contains("@");
 
+                    if (!ValidatorClass.EmptySpinner(LoginActivity.this, spProvince, "Province"))
+                        return;
+
                     if (!ValidatorClass.EmptySpinner(LoginActivity.this, spDistricts, "District"))
                         return;
 
-                    AppMain.district_code = DistrictsData.getDistrictCode(spDistricts.getSelectedItem().toString());
+                    AppMain.pro = spProvince.getSelectedItem().toString() + " : " + Dist_Prov_Data.getProvinceCode(spProvince.getSelectedItem().toString());
+                    AppMain.district_code = districts.get(spDistricts.getSelectedItemPosition()).getDistrict_code();
                     AppMain.district_name = spDistricts.getSelectedItem().toString();
 
                     finish();

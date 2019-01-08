@@ -44,6 +44,7 @@ public class AppMain extends Application {
     public static String TAG = "AppMain";
     public static Boolean admin = false;
     public static String IMEI;
+    public static String pro;
     public static String district_code;
     public static String district_name;
     public static String hh02txt;

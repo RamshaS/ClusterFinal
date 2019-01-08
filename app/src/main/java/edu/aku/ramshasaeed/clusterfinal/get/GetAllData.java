@@ -144,6 +144,9 @@ public class GetAllData extends AsyncTask<String, String, String> {
                         case "Vertices":
                             db.syncVertices(jsonArray);
                             break;
+                        case "Districts":
+                            db.syncDistricts(jsonArray);
+                            break;
                     }
 
                     pd.setMessage("Received: " + jsonArray.length());

@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import edu.aku.ramshasaeed.clusterfinal.Contracts.BLRandomContract;
+import edu.aku.ramshasaeed.clusterfinal.Contracts.DistrictContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.ListingFormContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.UsersContract;
 import edu.aku.ramshasaeed.clusterfinal.Contracts.VerticesContract;
@@ -226,6 +227,7 @@ public class MenuActivity extends AppCompatActivity implements SyncDevice.SyncDe
                 public void run() {
                     if (AppMain.district_code.equals("")) {
                         new GetAllData(mContext, "User", AppMain._HOST_URL + UsersContract.UsersTable._URI).execute();
+                        new GetAllData(mContext, "Districts", AppMain._HOST_URL + DistrictContract.singleDistricts._URI).execute();
                     } else {
                         new GetAllData(mContext, "Vertices", AppMain._HOST_URL + VerticesContract.singleVertices._URI).execute(orgID);
                         new GetAllData(mContext, "BLRandom", AppMain._HOST_URL + BLRandomContract.singleRandomHH._URI).execute(orgID);

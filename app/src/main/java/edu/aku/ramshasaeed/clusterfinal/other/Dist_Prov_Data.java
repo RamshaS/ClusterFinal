@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class DistrictsData {
+public abstract class Dist_Prov_Data {
 
-    private static Map<String, String> districts = new HashMap<>();
-    private static ArrayList<String> districtName;
+    private static Map<String, String> districts = new HashMap<>(), province = new HashMap<>();
+    private static ArrayList<String> districtName, provinceName;
 
-    private static void AddValuesToMap() {
+    private static void AddDistrictValuesToMap() {
         districts.put("JACOBABAD", "311");
         districts.put("KASHMOR", "312");
         districts.put("SHIKARPUR", "313");
@@ -42,8 +42,20 @@ public abstract class DistrictsData {
         districts.put("KORANGI DISTRICT", "356");
     }
 
+    private static void AddProvinceValuesToMap() {
+        province.put("KHYBER PAKHTUNKHWA", "1");
+        province.put("PUNJAB", "2");
+        province.put("SINDH", "3");
+        province.put("BALOCHISTAN", "4");
+        province.put("FATA", "5");
+        province.put("FEDERAL CAPITAL", "6");
+        province.put("GILGIT BALTISTAN", "7");
+        province.put("AZAD JAMMU AND KASHMIR", "8");
+        province.put("ADJACENT AREAS-FR", "9");
+    }
+
     public static ArrayList<String> getDistrictNames() {
-        AddValuesToMap();
+        AddDistrictValuesToMap();
 
         districtName = new ArrayList<>();
         districtName.add("....");
@@ -58,6 +70,24 @@ public abstract class DistrictsData {
 
     public static String getDistrictCode(String districtName) {
         return districts.get(districtName);
+    }
+
+    public static ArrayList<String> getProvinceNames() {
+        AddProvinceValuesToMap();
+
+        provinceName = new ArrayList<>();
+        provinceName.add("....");
+
+        Set<String> keys = province.keySet();
+        for (String key : keys) {
+            provinceName.add(key);
+        }
+
+        return provinceName;
+    }
+
+    public static String getProvinceCode(String provinceName) {
+        return province.get(provinceName);
     }
 
 
