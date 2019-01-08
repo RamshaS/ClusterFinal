@@ -17,21 +17,23 @@ public class VerticesContract {
     private Double poly_lng;
     private String poly_seq;
     private String marker_hh;
-    private String geoarea;
+    //    private String geoarea;
     private String pcode;
+    private String mortality;
 
 
     public VerticesContract() {
     }
 
     public VerticesContract sync(JSONObject jsonObject) throws JSONException {
-        this.cluster_code = jsonObject.getString(singleVertices.COLUMN_CLUSTER_CODE);
+        this.cluster_code = jsonObject.get(singleVertices.COLUMN_CLUSTER_CODE) != JSONObject.NULL ? jsonObject.getString(singleVertices.COLUMN_CLUSTER_CODE) : "";
         this.poly_lat = jsonObject.getDouble(singleVertices.COLUMN_POLY_LAT);
         this.poly_lng = jsonObject.getDouble(singleVertices.COLUMN_POLY_LANG);
-        this.poly_seq = jsonObject.getString(singleVertices.COLUMN_POLY_SEQ);
-        this.marker_hh = jsonObject.getString(singleVertices.COLUMN_MARKER_HH);
-        this.geoarea = jsonObject.getString(singleVertices.COLUMN_GEO_AREA);
-        this.pcode = jsonObject.getString(singleVertices.COLUMN_PSCODE);
+        this.poly_seq = jsonObject.get(singleVertices.COLUMN_POLY_SEQ) != JSONObject.NULL ? jsonObject.getString(singleVertices.COLUMN_POLY_SEQ) : "";
+        this.marker_hh = jsonObject.get(singleVertices.COLUMN_MARKER_HH) != JSONObject.NULL ? jsonObject.getString(singleVertices.COLUMN_MARKER_HH) : "";
+//        this.geoarea = jsonObject.getString(singleVertices.COLUMN_GEO_AREA);
+        this.pcode = jsonObject.get(singleVertices.COLUMN_PSCODE) != JSONObject.NULL ? jsonObject.getString(singleVertices.COLUMN_PSCODE) : "";
+        this.mortality = jsonObject.get(singleVertices.COLUMN_MORTALITY) != JSONObject.NULL ? jsonObject.getString(singleVertices.COLUMN_MORTALITY) : "";
 
 
         return this;
@@ -42,9 +44,10 @@ public class VerticesContract {
         this.poly_lat = cursor.getDouble(cursor.getColumnIndex(singleVertices.COLUMN_POLY_LAT));
         this.poly_lng = cursor.getDouble(cursor.getColumnIndex(singleVertices.COLUMN_POLY_LANG));
         this.poly_seq = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_POLY_SEQ));
-        this.marker_hh =cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_MARKER_HH));
-        this.geoarea = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_GEO_AREA));
+        this.marker_hh = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_MARKER_HH));
+//        this.geoarea = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_GEO_AREA));
         this.pcode = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_PSCODE));
+        this.mortality = cursor.getString(cursor.getColumnIndex(singleVertices.COLUMN_MORTALITY));
         return this;
     }
 
@@ -88,13 +91,13 @@ public class VerticesContract {
         this.marker_hh = marker_hh;
     }
 
-    public String getgeoarea() {
+/*    public String getgeoarea() {
         return geoarea;
     }
 
     public void setgeoarea(String geoarea) {
         this.geoarea = geoarea;
-    }
+    }*/
 
     public String getpcode() {
         return pcode;
@@ -102,6 +105,14 @@ public class VerticesContract {
 
     public void setpcode(String pcode) {
         this.pcode = pcode;
+    }
+
+    public String getMortality() {
+        return mortality;
+    }
+
+    public void setMortality(String mortality) {
+        this.mortality = mortality;
     }
 
     public static abstract class singleVertices implements BaseColumns {
@@ -114,8 +125,9 @@ public class VerticesContract {
         public static final String COLUMN_POLY_LANG = "poly_lng";
         public static final String COLUMN_POLY_SEQ = "poly_seq";
         public static final String COLUMN_MARKER_HH = "marker_hh";
-        public static final String COLUMN_GEO_AREA = "geoarea";
+        //        public static final String COLUMN_GEO_AREA = "geoarea";
         public static final String COLUMN_PSCODE = "pcode";
+        public static final String COLUMN_MORTALITY = "mortality";
 
         public static final String _URI = "vertices.php";
     }

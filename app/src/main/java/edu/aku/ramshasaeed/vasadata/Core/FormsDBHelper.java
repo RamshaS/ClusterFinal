@@ -9,15 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.Marker;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import edu.aku.ramshasaeed.vasadata.Contracts.DistrictContract;
 import edu.aku.ramshasaeed.vasadata.Contracts.DistrictContract.DistrictTable;
@@ -50,7 +46,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
             singleVertices.COLUMN_POLY_LANG + " TEXT, " +
             singleVertices.COLUMN_POLY_SEQ + " TEXT ," +
             singleVertices.COLUMN_MARKER_HH + " TEXT ," +
-            singleVertices.COLUMN_GEO_AREA + " TEXT, " +
+            singleVertices.COLUMN_MORTALITY + " TEXT, " +
             singleVertices.COLUMN_PSCODE + " TEXT " +
             ");";
 
@@ -64,9 +60,9 @@ public class FormsDBHelper extends SQLiteOpenHelper {
             ");";
     final String SQL_CREATE_DISTRICTS_TABLE = "CREATE TABLE " + DistrictTable.TABLE_NAME + " (" +
             DistrictTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-            DistrictTable.COLUMN_PROJECTNAME + " TEXT,"+
-            DistrictTable.COLUMN_GEOAREA + " TEXT,"+
-            DistrictTable.COLUMN_PCODE + " TEXT"+
+            DistrictTable.COLUMN_DISTRICT_CODE + " TEXT," +
+            DistrictTable.COLUMN_DISTRICT_NAME + " TEXT," +
+            DistrictTable.COLUMN_PROV_CODE + " TEXT" +
             ");";
 
     public FormsDBHelper(Context context) {
@@ -221,11 +217,11 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_POLY_LANG,
                 singleVertices.COLUMN_POLY_SEQ,
                 singleVertices.COLUMN_MARKER_HH,
-                singleVertices.COLUMN_GEO_AREA,
+                singleVertices.COLUMN_MORTALITY,
                 singleVertices.COLUMN_PSCODE
         };
 
-        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? AND ("+singleVertices.COLUMN_POLY_SEQ +" != '' OR "+singleVertices.COLUMN_POLY_SEQ+" != null)";
+        String whereClause = singleVertices.COLUMN_CLUSTER_CODE + " = ? ";
         String[] whereArgs = {cluster_code};
         String groupBy = null;
         String having = null;
@@ -268,7 +264,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 singleVertices.COLUMN_POLY_LANG,
                 singleVertices.COLUMN_POLY_SEQ,
                 singleVertices.COLUMN_MARKER_HH,
-                singleVertices.COLUMN_GEO_AREA,
+                singleVertices.COLUMN_MORTALITY,
                 singleVertices.COLUMN_PSCODE
         };
 
@@ -374,7 +370,7 @@ public class FormsDBHelper extends SQLiteOpenHelper {
                 values.put(singleVertices.COLUMN_POLY_LANG, vc.getPoly_lng());
                 values.put(singleVertices.COLUMN_POLY_SEQ, vc.getPoly_seq());
                 values.put(singleVertices.COLUMN_MARKER_HH, vc.getmarker_hh());
-                values.put(singleVertices.COLUMN_GEO_AREA, vc.getgeoarea());
+                values.put(singleVertices.COLUMN_MORTALITY, vc.getMortality());
                 values.put(singleVertices.COLUMN_PSCODE, vc.getpcode());
 
                 db.insert(singleVertices.TABLE_NAME, null, values);
@@ -414,32 +410,110 @@ public class FormsDBHelper extends SQLiteOpenHelper {
 
         }
     }
-    public void syncDistricts(JSONArray mcList) {
+
+    public void syncDistricts(JSONArray dislist) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(DistrictTable.TABLE_NAME, null, null);
 
         try {
-            JSONArray jsonArray = mcList;
-
+            JSONArray jsonArray = dislist;
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObjectVR = jsonArray.getJSONObject(i);
-
+                JSONObject jsonObjectDC = jsonArray.getJSONObject(i);
                 DistrictContract dc = new DistrictContract();
-                dc.sync(jsonObjectVR);
+                dc.Sync(jsonObjectDC);
 
                 ContentValues values = new ContentValues();
-
-                values.put(DistrictTable.COLUMN_PROJECTNAME, dc.getprojectName());
-                values.put(DistrictTable.COLUMN_GEOAREA, dc.getgeoarea());
-                values.put(DistrictTable.COLUMN_PCODE, dc.getpcode());
-
+                values.put(DistrictTable.COLUMN_DISTRICT_NAME, dc.getDistrict_name());
+                values.put(DistrictTable.COLUMN_DISTRICT_CODE, dc.getDistrict_code());
+                values.put(DistrictTable.COLUMN_PROV_CODE, dc.getProv_code());
                 db.insert(DistrictTable.TABLE_NAME, null, values);
             }
-            db.close();
-
         } catch (Exception e) {
-
+        } finally {
+            db.close();
         }
+    }
+
+    public ArrayList<DistrictContract> getAllDistricts(String prov_code) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = null;
+        String[] columns = {
+                DistrictTable.COLUMN_DISTRICT_CODE,
+                DistrictTable.COLUMN_DISTRICT_NAME,
+                DistrictTable.COLUMN_PROV_CODE
+        };
+
+        String whereClause = DistrictTable.COLUMN_PROV_CODE + "=?";
+        String[] whereArgs = {prov_code};
+        String groupBy = null;
+        String having = null;
+
+        String orderBy = DistrictTable.COLUMN_DISTRICT_NAME + " ASC";
+
+        ArrayList<DistrictContract> allBL = new ArrayList<>();
+        try {
+            c = db.query(
+                    DistrictTable.TABLE_NAME,  // The table to query
+                    columns,                   // The columns to return
+                    whereClause,               // The columns for the WHERE clause
+                    whereArgs,                 // The values for the WHERE clause
+                    groupBy,                   // don't group the rows
+                    having,                    // don't filter by row groups
+                    orderBy                    // The sort order
+            );
+            while (c.moveToNext()) {
+                DistrictContract dc = new DistrictContract();
+                allBL.add(dc.HydrateDistricts(c));
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return allBL;
+    }
+
+    public Boolean getDistrictsExists() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = null;
+        String[] columns = {
+                DistrictTable.COLUMN_DISTRICT_CODE,
+                DistrictTable.COLUMN_DISTRICT_NAME,
+                DistrictTable.COLUMN_PROV_CODE
+        };
+
+        String whereClause = null;
+        String[] whereArgs = null;
+        String groupBy = null;
+        String having = null;
+
+        String orderBy = DistrictTable.COLUMN_DISTRICT_NAME + " ASC";
+
+        try {
+            c = db.query(
+                    DistrictTable.TABLE_NAME,  // The table to query
+                    columns,                   // The columns to return
+                    whereClause,               // The columns for the WHERE clause
+                    whereArgs,                 // The values for the WHERE clause
+                    groupBy,                   // don't group the rows
+                    having,                    // don't filter by row groups
+                    orderBy                    // The sort order
+            );
+            while (c.moveToNext()) {
+                return true;
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+            if (db != null) {
+                db.close();
+            }
+        }
+        return false;
     }
 
 }

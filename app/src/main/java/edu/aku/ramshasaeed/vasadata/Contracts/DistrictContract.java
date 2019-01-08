@@ -8,75 +8,61 @@ import org.json.JSONObject;
 
 public class DistrictContract {
 
-    private String projectName;
-    private int _ID;
-    private String geoarea;
-    private String pcode;
+    private static final String TAG = "Districts_CONTRACT";
+    String district_name;
+    String district_code;
+    String prov_code;
 
     public DistrictContract() {
+        // Default Constructor
     }
 
-    public DistrictContract sync(JSONObject jsonObject) throws JSONException {
-        this.projectName= jsonObject.getString(DistrictTable.COLUMN_PROJECTNAME);
-        this.geoarea= jsonObject.getString(DistrictTable.COLUMN_GEOAREA);
-        this.pcode= jsonObject.getString(DistrictTable.COLUMN_PCODE);
+    public DistrictContract Sync(JSONObject jsonObject) throws JSONException {
+        this.district_name = jsonObject.getString(DistrictTable.COLUMN_DISTRICT_NAME);
+        this.district_code = jsonObject.getString(DistrictTable.COLUMN_DISTRICT_CODE);
+        this.prov_code = jsonObject.getString(DistrictTable.COLUMN_PROV_CODE);
 
+        return this;
+
+    }
+
+    public DistrictContract HydrateDistricts(Cursor cursor) {
+        this.district_code = cursor.getString(cursor.getColumnIndex(DistrictTable.COLUMN_DISTRICT_CODE));
+        this.district_name = cursor.getString(cursor.getColumnIndex(DistrictTable.COLUMN_DISTRICT_NAME));
+        this.prov_code = cursor.getString(cursor.getColumnIndex(DistrictTable.COLUMN_PROV_CODE));
         return this;
     }
 
-    public DistrictContract hydrate(Cursor cursor) {
-        this.projectName = cursor.getString(cursor.getColumnIndex(DistrictTable.COLUMN_PROJECTNAME));
-        this._ID = cursor.getInt(cursor.getColumnIndex(DistrictTable.COLUMN__ID));
-        this.geoarea = cursor.getString(cursor.getColumnIndex(DistrictTable.COLUMN_GEOAREA));
-        this.pcode = cursor.getString(cursor.getColumnIndex(DistrictTable.COLUMN_PCODE));
-
-
-        return this;
+    public String getDistrict_name() {
+        return district_name;
     }
 
-    public String getprojectName() {
-        return projectName;
+    public String getDistrict_code() {
+        return district_code;
     }
 
-    public int get_ID() {
-        return _ID;
+    public String getProv_code() {
+        return prov_code;
     }
 
-    public void set_ID(int _ID) {
-        this._ID = _ID;
+    public JSONObject toJSONObject() throws JSONException {
+
+        JSONObject json = new JSONObject();
+        json.put(DistrictTable.COLUMN_DISTRICT_NAME, this.district_name == null ? JSONObject.NULL : this.district_name);
+        json.put(DistrictTable.COLUMN_DISTRICT_CODE, this.district_code == null ? JSONObject.NULL : this.district_code);
+        json.put(DistrictTable.COLUMN_PROV_CODE, this.prov_code == null ? JSONObject.NULL : this.prov_code);
+
+        return json;
     }
 
-    public String getgeoarea() {
-        return geoarea;
-    }
-
-    public void setgeoarea(String geoarea) {
-        this.geoarea = geoarea;
-    }
-
-    public String getpcode() {
-        return pcode;
-    }
-
-    public void setpcode(String pcode) {
-        this.pcode = pcode;
-    }
-
-    public void setprojectName(String projectName) {
-        this.projectName = projectName;
-    }
 
     public static abstract class DistrictTable implements BaseColumns {
 
-        public static final String TABLE_NAME = "District";
-        public static final String COLUMN_NAME_NULLABLE = "nullColumnHack";
-        public static final String COLUMN_PROJECTNAME = "projectname";
-        public static final String COLUMN__ID = "_id";
-        public static final String COLUMN_GEOAREA = "geoarea";
-        public static final String COLUMN_PCODE = "pcode";
+        public static final String TABLE_NAME = "Districts";
+        public static final String COLUMN_DISTRICT_NAME = "district_name";
+        public static final String COLUMN_DISTRICT_CODE = "distict_code";
+        public static final String COLUMN_PROV_CODE = "prov_code";
 
-
-
-        public static final String _URI = "getDistricts.php";
+        public static final String _URI = "districts.php";
     }
 }

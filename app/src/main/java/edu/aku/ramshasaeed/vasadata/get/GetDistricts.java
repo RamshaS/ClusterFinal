@@ -21,7 +21,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.aku.ramshasaeed.vasadata.Contracts.DistrictContract;
-import edu.aku.ramshasaeed.vasadata.Contracts.MarkerContract;
 import edu.aku.ramshasaeed.vasadata.Core.AppMain;
 import edu.aku.ramshasaeed.vasadata.Core.FormsDBHelper;
 
@@ -29,7 +28,7 @@ import edu.aku.ramshasaeed.vasadata.Core.FormsDBHelper;
  * Created by hassan.naqvi on 4/28/2016.
  */
 public class GetDistricts extends AsyncTask<String, String, String> {
-    private final String TAG = "GetVertices()";
+    private final String TAG = "GetDistricts()";
     HttpURLConnection urlConnection;
     private Context mContext;
     private ProgressDialog pd;
@@ -42,8 +41,8 @@ public class GetDistricts extends AsyncTask<String, String, String> {
     protected void onPreExecute() {
         super.onPreExecute();
         pd = new ProgressDialog(mContext);
-        pd.setTitle("Syncing Cluster Marker");
-        pd.setMessage("Getting connected to Marker...");
+        pd.setTitle("Syncing Cluster Districts");
+        pd.setMessage("Getting connected to Districts...");
         pd.show();
 
     }
@@ -67,7 +66,7 @@ public class GetDistricts extends AsyncTask<String, String, String> {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.i(TAG, "Marker In: " + line);
+                    Log.i(TAG, "Districts In: " + line);
                     result.append(line);
                 }
             }

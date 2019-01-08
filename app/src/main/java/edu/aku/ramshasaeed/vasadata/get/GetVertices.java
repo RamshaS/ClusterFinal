@@ -12,13 +12,16 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import edu.aku.ramshasaeed.vasadata.Contracts.VerticesContract;
 import edu.aku.ramshasaeed.vasadata.Core.AppMain;
 import edu.aku.ramshasaeed.vasadata.Core.FormsDBHelper;
@@ -31,9 +34,11 @@ public class GetVertices extends AsyncTask<String, String, String> {
     HttpURLConnection urlConnection;
     private Context mContext;
     private ProgressDialog pd;
+    private String disCode;
 
-    public GetVertices(Context context) {
+    public GetVertices(Context context, String disCode) {
         mContext = context;
+        this.disCode = disCode;
     }
 
     @Override
@@ -57,6 +62,29 @@ public class GetVertices extends AsyncTask<String, String, String> {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setReadTimeout(10000 /* milliseconds */);
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
+
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setRequestProperty("charset", "utf-8");
+            urlConnection.setUseCaches(false);
+
+            // Starts the query
+            urlConnection.connect();
+            DataOutputStream wr = new DataOutputStream(urlConnection.getOutputStream());
+            JSONObject json = new JSONObject();
+            try {
+
+                json.put("pcode", disCode);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
+            Log.d(TAG, "downloadUrl: " + json.toString());
+            wr.writeBytes(json.toString());
+            wr.flush();
+            wr.close();
+
             Log.d(TAG, "doInBackground: " + urlConnection.getResponseCode());
             if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
