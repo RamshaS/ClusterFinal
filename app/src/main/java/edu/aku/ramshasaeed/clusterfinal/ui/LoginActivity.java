@@ -858,7 +858,7 @@ public class LoginActivity extends MenuActivity implements LoaderCallbacks<Curso
                         return;
 
                     AppMain.pro = spProvince.getSelectedItem().toString() + " : " + Dist_Prov_Data.getProvinceCode(spProvince.getSelectedItem().toString());
-                    AppMain.district_code = districts.get(spDistricts.getSelectedItemPosition()).getDistrict_code();
+                    AppMain.district_code = districts.get(spDistricts.getSelectedItemPosition() - 1).getDistrict_code();
                     AppMain.district_name = spDistricts.getSelectedItem().toString();
 
                     finish();
