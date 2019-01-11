@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!validatorClass.EmptySpinner(MainActivity.this, bi.spDistricts, "District"))
                     return;
 
-                new GetVertices(MainActivity.this, districts.get(bi.spDistricts.getSelectedItemPosition()).getDistrict_code()).execute();
+                new GetVertices(MainActivity.this, districts.get(bi.spDistricts.getSelectedItemPosition() - 1).getDistrict_code()).execute();
 //                new GetMarkers(MainActivity.this).execute();
             }
         });
