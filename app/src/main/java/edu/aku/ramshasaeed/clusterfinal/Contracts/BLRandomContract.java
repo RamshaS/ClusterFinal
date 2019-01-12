@@ -17,8 +17,8 @@ public class BLRandomContract implements Serializable {
     private String _ID;
     private String LUID;
     private String clusterCode; // hh02
-    private String structure;  // Structure
-    private String extension; // Extension
+    private String structure;   // Structure
+    private String extension;   // Extension
     private String hh;
     private String hhhead;
     private String randomDT;
